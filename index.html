@@ -2,13 +2,75 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Metro Connect Copilot — Kochi Multimodal Transit Planner</title>
-    <meta name="description" content="Kochi's AI-powered multimodal trip planner. Connect Kochi Metro, Water Metro, and feeder buses seamlessly, with real-time adaptive routing under transit disruptions." />
+    <meta name="theme-color" content="#123a37" />
+    <meta name="description" content="Metro Connect — a calmer way to move through Kochi." />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Metro Connect — Kochi, connected</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="topline"><span class="pulse"></span><span data-i18n="status">All systems moving · Live service view</span><span class="topline-right">Kochi, Kerala</span></div>
+    <header class="nav wrap">
+      <a class="brand" href="#top" aria-label="Metro Connect home"><span class="brand-mark">M</span><span>metro<br>connect</span></a>
+      <nav aria-label="Main navigation"><a href="#planner" data-i18n="navPlan">Plan a ride</a><a href="#explore" data-i18n="navExplore">Explore Kochi</a><a href="#help" data-i18n="navHelp">Help</a></nav>
+      <button class="language" id="languageToggle" aria-label="Change language">EN <span>⌄</span></button>
+    </header>
+
+    <main id="top">
+      <section class="hero wrap" id="planner">
+        <div class="hero-copy reveal">
+          <p class="eyebrow" data-i18n="eyebrow">ONE CITY. THREE WAYS TO GO.</p>
+          <h1 data-i18n="heroTitle">Kochi opens up<br><em>when you move.</em></h1>
+          <p class="hero-text" data-i18n="heroText">Metro, water metro and the last-mile bus—one easy plan, made for wandering well.</p>
+          <form class="planner" id="tripForm">
+            <label for="tripInput" class="sr-only">Where are you headed?</label>
+            <span class="search-icon">⌕</span><input id="tripInput" autocomplete="off" value="From Aluva to Fort Kochi by 4pm" />
+            <button type="submit" data-i18n="plan">Plan my trip <span>→</span></button>
+          </form>
+          <p class="helper"><span>✦</span> <span data-i18n="helper">Try “Fort Kochi to Marine Drive after sunset”</span></p>
+        </div>
+        <div class="hero-art reveal">
+          <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="water"></div>
+          <div class="city"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="boat"><b></b><span></span><span></span><span></span></div>
+          <div class="palm palm-one">✦</div><div class="palm palm-two">✦</div>
+          <div class="art-label"><span>09°58' N</span><strong>BACKWATERS<br>AT YOUR DOOR</strong></div>
+        </div>
+      </section>
+
+      <section class="route-result wrap" id="routeResult" aria-live="polite">
+        <div class="route-top"><div><p class="eyebrow" data-i18n="yourRoute">YOUR SMART ROUTE</p><h2 id="routeTitle">Aluva → Fort Kochi</h2></div><button class="share" id="shareTrip">↗ <span data-i18n="share">Share trip</span></button></div>
+        <div class="reroute" id="reroute"><span>!</span><div><strong data-i18n="rerouteTitle">Water Metro is running 12 min behind.</strong> <span data-i18n="rerouteText">We’ve held your connection and adjusted the walk.</span></div><button id="dismissReroute" aria-label="Dismiss">×</button></div>
+        <div class="route-grid">
+          <div class="timeline">
+            <div class="leg"><time>2:42<span>pm</span></time><div class="dot metro"></div><div><p><b data-i18n="metro">Kochi Metro</b><span class="pill">M1</span></p><small>Aluva → Maharaja’s College · 23 min</small></div></div>
+            <div class="leg"><time>3:10<span>pm</span></time><div class="dot walk"></div><div><p><b data-i18n="walk">Easy walk</b></p><small>500 m to Water Metro terminal · 7 min</small></div></div>
+            <div class="leg"><time>3:22<span>pm</span></time><div class="dot watermetro"></div><div><p><b data-i18n="waterMetro">Water Metro</b><span class="pill blue">W4</span></p><small>High Court → Fort Kochi · 18 min</small></div></div>
+          </div>
+          <aside class="fare-box"><span class="mini-label" data-i18n="totalFare">ESTIMATED TOTAL</span><strong>₹ <span id="fare">62</span></strong><p id="routeTime">40 min · Arrive 3:40 pm</p><hr><p class="ticket-note" data-i18n="ticketNote">Pay with a Kochi1 card, or buy a QR ticket at each terminal.</p><button class="text-button" data-i18n="viewTicket">View ticket options →</button></aside>
+        </div>
+        <p class="route-why"><span>✦</span> <span id="routeReason" data-i18n="reason">Why this way? The water crossing skips afternoon road traffic and saves about 18 minutes.</span></p>
+      </section>
+
+      <section class="story split wrap reveal" id="explore">
+        <div class="photo fort-photo"><div class="photo-stamp">KOCHI<br>09:45</div></div>
+        <div class="story-copy"><p class="eyebrow" data-i18n="firstTime">FIRST TIME IN KOCHI?</p><h2 data-i18n="tourTitle">Let the city<br><em>tell its story.</em></h2><p data-i18n="tourText">Start with a ferry breeze, follow the spice-scented lanes and end by the waterfront. We mapped the good bits in between.</p><div class="tour-switch" role="tablist"><button class="tour-tab active" data-tour="one" role="tab">1 DAY</button><button class="tour-tab" data-tour="two" role="tab">2 DAYS</button></div><div class="tour-detail" id="tourDetail"><b>THE ESSENTIAL LOOP</b><p>Fort Kochi · Mattancherry · Marine Drive</p><span>6h 30m</span><span>₹118</span><button class="arrow-button" aria-label="View one day tour">→</button></div></div>
+      </section>
+
+      <section class="modes wrap reveal">
+        <div class="modes-intro"><p class="eyebrow" data-i18n="threeModes">THREE MODES, ONE RHYTHM</p><h2 data-i18n="modesTitle">The best way<br>is rarely one way.</h2></div>
+        <div class="mode-items"><article><div class="mode-number">01</div><h3>METRO</h3><p data-i18n="metroDesc">For the quick, air-conditioned stretch across town.</p><span class="mode-icon metro-icon">╲╱</span></article><article><div class="mode-number">02</div><h3>WATER METRO</h3><p data-i18n="waterDesc">For the route that trades traffic for open water.</p><span class="mode-icon water-icon">⌁</span></article><article><div class="mode-number">03</div><h3>FEEDER BUS</h3><p data-i18n="busDesc">For the small hop that gets you right to the door.</p><span class="mode-icon bus-icon">▣</span></article></div>
+      </section>
+
+      <section class="quote-band"><div class="wrap quote-content reveal"><p class="eyebrow">MOVE LIKE A LOCAL</p><h2 data-i18n="quote">One tap, one plan,<br>all of Kochi.</h2><p data-i18n="quoteText">One combined fare. Clear connections. No second guessing.</p><a href="#planner" data-i18n="planRide">Plan a ride <span>→</span></a></div></section>
+
+      <section class="faq wrap reveal" id="help"><p class="eyebrow" data-i18n="faqLabel">GOOD TO KNOW</p><h2 data-i18n="faqTitle">Questions from the<br>first-time traveller.</h2><div class="faq-list"><details open><summary data-i18n="faq1q">How do fares and tickets work?<span>+</span></summary><p data-i18n="faq1a">Your trip total includes every mode. Pick up a Kochi1 card for the smoothest transfers, or use QR tickets at metro and Water Metro stations.</p></details><details><summary data-i18n="faq2q">Is the Water Metro running today?<span>+</span></summary><p data-i18n="faq2a">We check the service feed each time you plan. If a sailing changes, you’ll see a clear alternative before you leave.</p></details><details><summary data-i18n="faq3q">Is it safe to travel after dark?<span>+</span></summary><p data-i18n="faq3a">Use active stations and the last listed connection. Our routes factor in walking time so you can travel at an easy pace.</p></details><details><summary data-i18n="faq4q">Can I use this in Malayalam or Hindi?<span>+</span></summary><p data-i18n="faq4a">Yes. Use the language control above—key travel information will stay simple and clear.</p></details></div></section>
+    </main>
+    <footer class="footer"><div class="wrap footer-inner"><a class="brand" href="#top"><span class="brand-mark">M</span><span>metro<br>connect</span></a><p data-i18n="footer">A more connected way to discover Kochi.</p><span>© 2024 Metro Connect</span></div></footer>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="./app.js"></script>
   </body>
 </html>
