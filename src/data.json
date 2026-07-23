@@ -1,0 +1,159 @@
+{
+  "metro_line": {
+    "name": "Blue Line",
+    "stations": [
+      { "id": "aluva", "name": "Aluva", "order": 1, "is_transfer": true },
+      { "id": "pulinchodu", "name": "Pulinchodu", "order": 2 },
+      { "id": "companypady", "name": "Companypady", "order": 3 },
+      { "id": "ambattukavu", "name": "Ambattukavu", "order": 4 },
+      { "id": "muttom", "name": "Muttom", "order": 5 },
+      { "id": "kalamassery", "name": "Kalamassery", "order": 6, "is_transfer": true },
+      { "id": "cochin_university", "name": "Cochin University", "order": 7 },
+      { "id": "pathadipalam", "name": "Pathadipalam", "order": 8 },
+      { "id": "edapally", "name": "Edapally", "order": 9, "is_transfer": true },
+      { "id": "changampuzha_park", "name": "Changampuzha Park", "order": 10 },
+      { "id": "palarivattom", "name": "Palarivattom", "order": 11 },
+      { "id": "jln_stadium", "name": "JLN Stadium", "order": 12 },
+      { "id": "kaloor", "name": "Kaloor", "order": 13 },
+      { "id": "lisie", "name": "Lisie", "order": 14 },
+      { "id": "mg_road", "name": "MG Road", "order": 15 },
+      { "id": "maharajas_college", "name": "Maharajas College", "order": 16 },
+      { "id": "ernakulam_south", "name": "Ernakulam South", "order": 17 },
+      { "id": "kadavanthra", "name": "Kadavanthra", "order": 18 },
+      { "id": "elamkulam", "name": "Elamkulam", "order": 19 },
+      { "id": "vyttila", "name": "Vyttila", "order": 20, "is_transfer": true },
+      { "id": "thykoodam", "name": "Thykoodam", "order": 21 },
+      { "id": "petta", "name": "Petta", "order": 22 },
+      { "id": "vadakkekotta", "name": "Vadakkekotta", "order": 23 },
+      { "id": "sn_junction", "name": "SN Junction", "order": 24 },
+      { "id": "thrippunithura", "name": "Thrippunithura", "order": 25, "is_transfer": true }
+    ],
+    "frequency_min": 7,
+    "first_train": "06:00",
+    "last_train": "22:00"
+  },
+  "water_metro": {
+    "jetties": [
+      { "id": "high_court", "name": "High Court Jetty", "lat": 9.9796, "lng": 76.2764 },
+      { "id": "fort_kochi", "name": "Fort Kochi Jetty", "lat": 9.9698, "lng": 76.2447 },
+      { "id": "vypin", "name": "Vypin Jetty", "lat": 9.9765, "lng": 76.2488 },
+      { "id": "vyttila_jetty", "name": "Vyttila Jetty", "lat": 9.9575, "lng": 76.3228 },
+      { "id": "kakkanad_jetty", "name": "Kakkanad Jetty", "lat": 9.9926, "lng": 76.3533 },
+      { "id": "south_chittoor", "name": "South Chittoor Jetty", "lat": 10.0289, "lng": 76.2731 },
+      { "id": "bolgatty", "name": "Bolgatty Jetty", "lat": 9.9867, "lng": 76.2682 },
+      { "id": "eloor", "name": "Eloor Jetty", "lat": 10.0652, "lng": 76.2995 }
+    ],
+    "routes": [
+      {
+        "id": "hc_fk",
+        "name": "High Court - Fort Kochi",
+        "from": "high_court",
+        "to": "fort_kochi",
+        "stops": ["high_court", "fort_kochi"],
+        "duration_min": 20,
+        "frequency_min": 15,
+        "operating_hours": "07:00 - 21:00",
+        "price_inr": 40
+      },
+      {
+        "id": "hc_vp",
+        "name": "High Court - Vypin",
+        "from": "high_court",
+        "to": "vypin",
+        "stops": ["high_court", "vypin"],
+        "duration_min": 10,
+        "frequency_min": 10,
+        "operating_hours": "07:00 - 21:30",
+        "price_inr": 20
+      },
+      {
+        "id": "vy_kk",
+        "name": "Vyttila - Kakkanad",
+        "from": "vyttila_jetty",
+        "to": "kakkanad_jetty",
+        "stops": ["vyttila_jetty", "kakkanad_jetty"],
+        "duration_min": 25,
+        "frequency_min": 20,
+        "operating_hours": "08:00 - 20:00",
+        "price_inr": 30
+      },
+      {
+        "id": "hc_sc",
+        "name": "High Court - South Chittoor",
+        "from": "high_court",
+        "to": "south_chittoor",
+        "stops": ["high_court", "bolgatty", "south_chittoor"],
+        "duration_min": 30,
+        "frequency_min": 30,
+        "operating_hours": "08:00 - 19:30",
+        "price_inr": 35
+      }
+    ]
+  },
+  "feeder_buses": [
+    {
+      "id": "vyttila_loop",
+      "name": "MC-1: Vyttila Hub Loop",
+      "connecting_metro": "vyttila",
+      "frequency_min": 15,
+      "price_inr": 15,
+      "stops": [
+        "Vyttila Metro",
+        "Vyttila Water Metro Jetty",
+        "Mobility Hub Terminal",
+        "Ponnurunni",
+        "Gold Souk Mall",
+        "Vyttila Metro"
+      ]
+    },
+    {
+      "id": "aluva_airport_link",
+      "name": "MC-2: Aluva Airport Shuttle",
+      "connecting_metro": "aluva",
+      "frequency_min": 30,
+      "price_inr": 50,
+      "stops": [
+        "Aluva Metro",
+        "Athani Junction",
+        "CIAL Airport Terminal 1",
+        "CIAL Airport Terminal 3",
+        "Aluva Metro"
+      ]
+    },
+    {
+      "id": "kalamassery_infopark",
+      "name": "MC-3: Kalamassery IT Expressway",
+      "connecting_metro": "kalamassery",
+      "frequency_min": 20,
+      "price_inr": 20,
+      "stops": [
+        "Kalamassery Metro",
+        "HMT Junction",
+        "Medical College Kochi",
+        "Infopark Phase 1",
+        "Infopark Phase 2",
+        "SmartCity Kochi"
+      ]
+    },
+    {
+      "id": "edapally_kakkanad_feeder",
+      "name": "MC-4: Edapally - Kakkanad Link",
+      "connecting_metro": "edapally",
+      "frequency_min": 20,
+      "price_inr": 25,
+      "stops": [
+        "Edapally Metro",
+        "Palarivattom Bypass",
+        "Vazhakkala",
+        "Kakkanad Junction",
+        "Civil Station Kakkanad"
+      ]
+    }
+  ],
+  "walk_connections": [
+    { "from": "mg_road", "to": "high_court", "distance_meters": 1200, "duration_min": 15 },
+    { "from": "vyttila", "to": "vyttila_jetty", "distance_meters": 300, "duration_min": 4 },
+    { "from": "kalamassery", "to": "hmt_junction", "distance_meters": 800, "duration_min": 10 },
+    { "from": "fort_kochi", "to": "fort_kochi_jetty", "distance_meters": 600, "duration_min": 8 }
+  ]
+}

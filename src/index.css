@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  
+  --color-cream-bg: #fbfcf8;
+  --color-cream-card: #ffffff;
+  --color-charcoal: #111111;
+  --color-charcoal-light: #444444;
+  
+  /* Soft pastel coloring for agentic badges */
+  --color-metro-bg: #e6f7f6;
+  --color-metro-border: #80ded9;
+  --color-metro-text: #086b66;
+
+  --color-water-bg: #e3f2fd;
+  --color-water-border: #90caf9;
+  --color-water-text: #0d47a1;
+
+  --color-feeder-bg: #edf7ee;
+  --color-feeder-border: #a3e0a8;
+  --color-feeder-text: #0d6e15;
+
+  --color-disrupt-bg: #fdf2f2;
+  --color-disrupt-border: #f8b4b4;
+  --color-disrupt-text: #9b1c1c;
+
+  --color-ticket-bg: #f3f2fc;
+  --color-ticket-border: #c7c5f4;
+  --color-ticket-text: #3730a3;
+
+  --color-fare-bg: #fefcf0;
+  --color-fare-border: #fde8a4;
+  --color-fare-text: #854d0e;
+}
+
+body {
+  background-color: var(--color-cream-bg);
+  color: var(--color-charcoal-light);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-serif-custom {
+  font-family: var(--font-serif);
+  color: var(--color-charcoal);
+}
+
+/* Landing Page Hero Pill Styles */
+.agent-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border-width: 1px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agent-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* Custom premium card borders */
+.clean-card {
+  background: var(--color-cream-card);
+  border: 1px solid #eef0e5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 10px 20px -5px rgba(0,0,0,0.03);
+}
+
+/* Floating Animation Utilities */
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float 3.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Scrollbar thin formatting for details drawer */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
