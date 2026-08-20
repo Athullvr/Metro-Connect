@@ -2,6 +2,43 @@ import { matchStation } from '../lib/stationMatcher.js';
 import { findShortestPath, getNode } from '../lib/transitGraph.js';
 import { formatItinerary } from '../lib/routeFormatter.js';
 import { parseDisruption } from '../lib/disruptionParser.js';
+import { assertValidItinerary } from '../lib/itinerarySchema.js';
+
+const FETCH_TIMEOUT_MS = 8000;
+const MAX_RETRIES = 2;
+const RETRY_BASE_DELAY_MS = 400;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Retries transient failures (network errors, timeouts, 5xx/429) with
+// exponential backoff. 4xx client errors are not retried since a retry
+// would return the same result.
+async function fetchWithRetry(url, options) {
+  let lastError;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+    try {
+      const response = await fetch(url, { ...options, signal: controller.signal });
+      if (response.ok) return response;
+
+      if (response.status < 500 && response.status !== 429) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+      lastError = new Error(`Request failed: ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (attempt < MAX_RETRIES) {
+      await sleep(RETRY_BASE_DELAY_MS * 2 ** attempt);
+    }
+  }
+  throw lastError;
+}
 
 export class UnresolvedStationError extends Error {
   constructor(message, suggestions = []) {
@@ -92,17 +129,13 @@ export const planRoute = async (origin, destination, constraints = '', useSimula
   }
 
   try {
-    const response = await fetch('/api/plan', {
+    const response = await fetchWithRetry('/api/plan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ origin, destination, constraints })
     });
 
-    if (!response.ok) {
-      throw new Error(`Planner proxy error: ${response.status}`);
-    }
-
-    return await response.json();
+    return assertValidItinerary(await response.json());
   } catch (error) {
     console.error('Planner Agent failed, falling back to Simulator:', error);
     return getLocalPlannedRoute(origin, destination, constraints);
@@ -119,17 +152,13 @@ export const replanRoute = async (currentItinerary, disruption, useSimulator = t
   }
 
   try {
-    const response = await fetch('/api/replan', {
+    const response = await fetchWithRetry('/api/replan', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ itinerary: currentItinerary, disruption })
     });
 
-    if (!response.ok) {
-      throw new Error(`Adapter proxy error: ${response.status}`);
-    }
-
-    return await response.json();
+    return assertValidItinerary(await response.json());
   } catch (error) {
     console.error('Adapter Agent failed, falling back to Simulator:', error);
     return getLocalReplannedRoute(currentItinerary, disruption);
