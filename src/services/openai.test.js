@@ -95,10 +95,17 @@ describe('planRoute (live mode)', () => {
 });
 
 describe('replanRoute (simulator mode)', () => {
-  it('reroutes around a blocked jetty', async () => {
-    const original = await planRoute('Fort Kochi', 'High Court Jetty', {}, true);
-    const replanned = await replanRoute(original, 'High Court Water Metro Jetty is closed.', true);
+  it('reroutes around a blocked intermediate jetty via the road-link backup', async () => {
+    const original = await planRoute('MG Road', 'Fort Kochi', {}, true);
+    expect(original.legs.some((l) => l.mode === 'water_metro')).toBe(true);
+
+    const replanned = await replanRoute(
+      original,
+      'High Court Water Metro Jetty operations are closed due to shallow channels.',
+      true
+    );
     expect(replanned.legs.length).toBeGreaterThan(0);
+    expect(replanned.legs.some((l) => l.mode === 'water_metro' && l.from === 'High Court Jetty')).toBe(false);
     expect(replanned.explanation).toContain('Rerouted');
   });
 });
