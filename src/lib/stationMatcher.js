@@ -1,4 +1,4 @@
-import { getAllNodes, getLandmarks } from './transitGraph';
+import { getAllNodes, getLandmarks } from './transitGraph.js';
 
 // Limited Malayalam aliases for a handful of well-known stops. Not a full
 // translation layer — just enough to unblock a Malayalam-typed query for the

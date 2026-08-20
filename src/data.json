@@ -163,6 +163,35 @@
       ]
     }
   ],
+  "road_links": [
+    {
+      "id": "vyttila_fortkochi_road",
+      "name": "KSRTC Road Link: Vyttila - Fort Kochi (via Goshree Bridges)",
+      "from": "vyttila",
+      "to": "fort_kochi",
+      "duration_min": 45,
+      "frequency_min": 20,
+      "price_inr": 30
+    },
+    {
+      "id": "kakkanad_infopark_link",
+      "name": "Local Auto/Shuttle: Civil Station Kakkanad - Infopark",
+      "from": "civil_station_kakkanad",
+      "to": "infopark_phase_1",
+      "duration_min": 10,
+      "frequency_min": 10,
+      "price_inr": 15
+    },
+    {
+      "id": "kakkanad_jetty_junction_link",
+      "name": "Local Auto/Shuttle: Kakkanad Jetty - Kakkanad Junction",
+      "from": "kakkanad_jetty",
+      "to": "kakkanad_junction",
+      "duration_min": 12,
+      "frequency_min": 15,
+      "price_inr": 15
+    }
+  ],
   "walk_connections": [
     { "from": "mg_road", "to": "high_court", "distance_meters": 1200, "duration_min": 15 },
     { "from": "vyttila", "to": "vyttila_jetty", "distance_meters": 300, "duration_min": 4 },

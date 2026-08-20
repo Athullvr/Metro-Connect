@@ -1,4 +1,4 @@
-import transitData from '../data.json';
+import transitData from '../data.json' with { type: 'json' };
 
 // Fare zones match the F1-F6 bands published by Kochi Metro, applied by
 // station-count (not raw distance) — this is the same formula the project's
@@ -13,7 +13,7 @@ export function metroFare(stopsApart) {
 }
 
 const METRO_HOP_MINUTES = 2;
-const METRO_HOP_MIN_FLOOR = 6;
+export const METRO_HOP_MIN_FLOOR = 6;
 // Feeder routes only publish a flat fare and headway, not per-stop timing —
 // this fixed per-segment duration is an assumption, not sourced data.
 const FEEDER_SEGMENT_MINUTES = 6;

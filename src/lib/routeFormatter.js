@@ -1,4 +1,4 @@
-import { getNode, metroFare } from './transitGraph';
+import { getNode, metroFare, METRO_HOP_MIN_FLOOR } from './transitGraph.js';
 
 function groupIntoLegs(path) {
   const groups = [];
@@ -21,7 +21,7 @@ function buildLeg(group) {
 
   if (group.mode === 'metro') {
     const stopsApart = group.steps.length;
-    const duration = Math.max(6, stopsApart * 2);
+    const duration = Math.max(METRO_HOP_MIN_FLOOR, stopsApart * 2);
     return {
       mode: 'metro',
       name: group.name,

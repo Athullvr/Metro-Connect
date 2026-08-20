@@ -1,7 +1,7 @@
-import { matchStation } from '../lib/stationMatcher';
-import { findShortestPath, getNode } from '../lib/transitGraph';
-import { formatItinerary } from '../lib/routeFormatter';
-import { parseDisruption } from '../lib/disruptionParser';
+import { matchStation } from '../lib/stationMatcher.js';
+import { findShortestPath, getNode } from '../lib/transitGraph.js';
+import { formatItinerary } from '../lib/routeFormatter.js';
+import { parseDisruption } from '../lib/disruptionParser.js';
 
 export class UnresolvedStationError extends Error {
   constructor(message, suggestions = []) {

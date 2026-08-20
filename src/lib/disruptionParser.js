@@ -1,5 +1,5 @@
-import transitData from '../data.json';
-import { getAllNodes } from './transitGraph';
+import transitData from '../data.json' with { type: 'json' };
+import { getAllNodes } from './transitGraph.js';
 
 /**
  * Scans free-text disruption copy (e.g. "High Court Water Metro Jetty is
@@ -9,13 +9,25 @@ import { getAllNodes } from './transitGraph';
  * "delayed" is treated the same as "closed" (avoid it) since the simulator's
  * job is to demonstrate a reroute, not to model partial degradation.
  */
+// Strips generic suffix words so "High Court Jetty" still matches disruption
+// copy phrased as "High Court Water Metro Jetty" (the distinguishing part is
+// "High Court" — "jetty"/"metro"/"station" alone would match too much).
+function coreName(name) {
+  return name
+    .toLowerCase()
+    .replace(/\b(water metro|jetty|metro station|metro|station|terminal)\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function parseDisruption(disruptionText) {
   const text = (disruptionText || '').toLowerCase();
   const blockedNodeIds = new Set();
   const blockedRouteIds = new Set();
 
   for (const node of getAllNodes()) {
-    if (node.name.length >= 4 && text.includes(node.name.toLowerCase())) {
+    const core = coreName(node.name);
+    if (core.length >= 4 && text.includes(core)) {
       blockedNodeIds.add(node.id);
     }
   }
