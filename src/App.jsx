@@ -3,6 +3,7 @@ import Home from './components/Home';
 import Itinerary from './components/Itinerary';
 import DisruptionSimulator from './components/DisruptionSimulator';
 import { planRoute, replanRoute } from './services/openai';
+import { saveTrip } from './lib/tripHistory.js';
 import { Train, Ship, Bus } from 'lucide-react';
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
       setItinerary(plan);
       setReroutedItinerary(null); // Clear any old reroutes
       setScreen('itinerary');
+      saveTrip({ origin: src, destination: dest, constraints: activeConstraints, itinerary: plan, timestamp: Date.now() });
     } catch (err) {
       console.error(err);
       setPlanError({ message: err.message, suggestions: err.suggestions || [] });

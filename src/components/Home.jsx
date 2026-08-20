@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import transitData from '../data.json';
 import { detectNearestStation } from '../lib/geolocation.js';
+import { getTrips, clearTrips } from '../lib/tripHistory.js';
 
 const SUGGESTIONS = [
   {
@@ -128,6 +129,17 @@ export default function Home({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const [recentTrips, setRecentTrips] = useState([]);
+
+  useEffect(() => {
+    setRecentTrips(getTrips());
+  }, []);
+
+  const handleClearHistory = () => {
+    clearTrips();
+    setRecentTrips([]);
+  };
 
   const handleSuggestClick = (s) => {
     setOrigin(s.origin);
@@ -422,6 +434,34 @@ export default function Home({
             </button>
           ))}
         </div>
+
+        {/* Recent Trips */}
+        {recentTrips.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold text-gray-400 uppercase">Recent Trips:</span>
+              <button
+                type="button"
+                onClick={handleClearHistory}
+                className="text-[10px] font-semibold text-gray-400 hover:text-red-500 transition-all cursor-pointer"
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              {recentTrips.map((trip) => (
+                <button
+                  key={trip.id}
+                  type="button"
+                  onClick={() => handleSuggestClick({ origin: trip.origin, destination: trip.destination })}
+                  className="text-xs bg-gray-50 hover:bg-gray-100 border border-gray-200/80 text-charcoal-light px-3 py-1.5 rounded-full transition-all cursor-pointer"
+                >
+                  {trip.origin} ➔ {trip.destination}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
