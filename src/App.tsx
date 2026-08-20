@@ -59,22 +59,29 @@ export default function App() {
     <div className="min-h-screen bg-cream-bg text-gray-700 flex flex-col font-sans select-none relative">
       {/* Top Navbar */}
       <header className="glass bg-white/70 sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-[#eef0e5]">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => setScreen('home')}>
-          <div className="w-8 h-8 rounded-xl bg-charcoal flex items-center justify-center text-white font-serif font-semibold text-sm">
+        <button
+          type="button"
+          className="flex items-center gap-3 cursor-pointer text-left"
+          onClick={() => setScreen('home')}
+          aria-label="Go to home screen"
+        >
+          <div className="w-8 h-8 rounded-xl bg-charcoal flex items-center justify-center text-white font-serif font-semibold text-sm" aria-hidden="true">
             N
           </div>
           <div>
             <h1 className="text-sm font-semibold text-charcoal tracking-tight flex items-center gap-1.5 font-sans m-0">
               Metro Connect <span className="text-water-text font-bold">Copilot</span>
               {/* Active Engine Status Indicator Dot */}
-              <span 
-                className={`inline-block w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-400' : 'bg-emerald-500'} animate-pulse`} 
+              <span
+                className={`inline-block w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-400' : 'bg-emerald-500'} animate-pulse`}
                 title={useSimulator ? 'Engine: Offline Simulator' : 'Engine: OpenAI Live'}
+                role="status"
+                aria-label={useSimulator ? 'Engine: Offline Simulator' : 'Engine: OpenAI Live'}
               ></span>
             </h1>
             <p className="text-[10px] text-gray-500">multimodal transit reasoning layer</p>
           </div>
-        </div>
+        </button>
 
 
       </header>

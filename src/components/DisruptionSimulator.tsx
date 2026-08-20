@@ -100,20 +100,22 @@ export default function DisruptionSimulator({
 
         {/* Presets List */}
         {feedLoading ? (
-          <div className="text-xs text-gray-400 py-6 text-center">Checking live network conditions...</div>
+          <div role="status" aria-live="polite" className="text-xs text-gray-400 py-6 text-center">Checking live network conditions...</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {activePresets.map((preset) => {
               const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
                 .toLowerCase()
                 .includes(preset.targetRoute.toLowerCase());
+              const isActive = activeDisruption?.id === preset.id;
 
               return (
                 <button
                   key={preset.id}
                   onClick={() => handleTriggerPreset(preset)}
+                  aria-pressed={isActive}
                   className={`text-left p-4 rounded-2xl border transition-all cursor-pointer ${
-                    activeDisruption?.id === preset.id
+                    isActive
                       ? 'bg-red-100/30 border-red-400'
                       : 'bg-white border-gray-200 hover:bg-gray-50'
                   } relative`}
@@ -136,8 +138,8 @@ export default function DisruptionSimulator({
 
       {/* Loader */}
       {loading && (
-        <div className="clean-card rounded-3xl p-16 text-center">
-          <div className="relative w-12 h-12 mx-auto mb-4">
+        <div role="status" aria-live="polite" className="clean-card rounded-3xl p-16 text-center">
+          <div className="relative w-12 h-12 mx-auto mb-4" aria-hidden="true">
             <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
             <div className="absolute inset-0 rounded-full border-4 border-t-charcoal animate-spin"></div>
             <Zap className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-charcoal animate-pulse" size={18} />
@@ -151,8 +153,8 @@ export default function DisruptionSimulator({
 
       {/* Replan error */}
       {!loading && replanError && (
-        <div className="clean-card rounded-3xl p-6 border border-red-200 bg-red-50/30 text-center">
-          <XCircle className="mx-auto mb-2 text-red-600" size={20} />
+        <div role="alert" className="clean-card rounded-3xl p-6 border border-red-200 bg-red-50/30 text-center">
+          <XCircle className="mx-auto mb-2 text-red-600" size={20} aria-hidden="true" />
           <h3 className="text-sm font-bold text-charcoal mb-1">No alternative route found</h3>
           <p className="text-xs text-gray-500">{replanError}</p>
         </div>

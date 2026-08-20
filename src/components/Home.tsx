@@ -130,6 +130,16 @@ export default function Home({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleDropdownKeyDown = (e, closeDropdown) => {
+    if (e.key === 'Escape') {
+      closeDropdown();
+      e.target.blur();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      e.currentTarget.parentElement.querySelector('[role="listbox"] button')?.focus();
+    }
+  };
+
   const [recentTrips, setRecentTrips] = useState([]);
 
   useEffect(() => {
@@ -178,10 +188,12 @@ export default function Home({
         
         {/* Settings Toggle */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
-          <button 
+          <button
             onClick={() => setShowSettings(!showSettings)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-500 transition-all border border-gray-200 cursor-pointer"
             title="Configure AI Agent API Settings"
+            aria-label="Configure AI Agent API Settings"
+            aria-expanded={showSettings}
           >
             <Settings size={16} />
           </button>
@@ -200,6 +212,7 @@ export default function Home({
                 <button
                   type="button"
                   onClick={() => setUseSimulator(true)}
+                  aria-pressed={useSimulator}
                   className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
                     useSimulator
                       ? 'bg-white text-charcoal shadow-sm'
@@ -211,6 +224,7 @@ export default function Home({
                 <button
                   type="button"
                   onClick={() => setUseSimulator(false)}
+                  aria-pressed={!useSimulator}
                   className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
                     !useSimulator
                       ? 'bg-white text-charcoal shadow-sm'
@@ -234,7 +248,7 @@ export default function Home({
             {/* Origin Autocomplete Input */}
             <div ref={originRef} className="relative">
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-[10px] text-metro-text font-bold tracking-wider uppercase">Starting Station</label>
+                <label htmlFor="origin-input" className="block text-[10px] text-metro-text font-bold tracking-wider uppercase">Starting Station</label>
                 <button
                   type="button"
                   onClick={handleUseMyLocation}
@@ -247,10 +261,16 @@ export default function Home({
                 </button>
               </div>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-metro-text" size={16} />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-metro-text" size={16} aria-hidden="true" />
                 <input
+                  id="origin-input"
                   type="text"
                   required
+                  role="combobox"
+                  aria-expanded={showOriginDropdown && originSuggestions.length > 0}
+                  aria-haspopup="listbox"
+                  aria-controls="origin-listbox"
+                  aria-autocomplete="list"
                   placeholder="Type start station or click suggestions..."
                   value={origin}
                   onChange={(e) => {
@@ -261,25 +281,29 @@ export default function Home({
                     setShowOriginDropdown(true);
                     setShowDestDropdown(false);
                   }}
+                  onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowOriginDropdown(false))}
                   className="w-full bg-white border border-gray-200 focus:border-metro-border rounded-xl pl-11 pr-4 py-3.5 text-charcoal text-xs focus:outline-none transition-all"
                 />
               </div>
               {locationError && (
-                <p className="text-[10px] text-red-500 mt-1">{locationError}</p>
+                <p role="alert" className="text-[10px] text-red-500 mt-1">{locationError}</p>
               )}
 
               {/* Suggestions Dropdown overlay */}
               {showOriginDropdown && originSuggestions.length > 0 && (
-                <div className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
+                <div id="origin-listbox" role="listbox" aria-label="Starting station suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
                   {originSuggestions.map((s, idx) => (
                     <button
                       key={idx}
                       type="button"
+                      role="option"
+                      aria-selected={origin === s.name}
                       onClick={() => {
                         setOrigin(s.name);
                         setShowOriginDropdown(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
+                      onKeyDown={(e) => e.key === 'Escape' && setShowOriginDropdown(false)}
+                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 focus:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
                     >
                       <span className="font-medium">{s.name}</span>
                       <span className="text-[9px] font-bold text-gray-400 uppercase bg-gray-100 px-1.5 py-0.5 rounded">
@@ -293,12 +317,18 @@ export default function Home({
 
             {/* Destination Autocomplete Input */}
             <div ref={destRef} className="relative">
-              <label className="block text-[10px] text-water-text font-bold tracking-wider uppercase mb-1.5">Destination</label>
+              <label htmlFor="destination-input" className="block text-[10px] text-water-text font-bold tracking-wider uppercase mb-1.5">Destination</label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-water-text" size={16} />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-water-text" size={16} aria-hidden="true" />
                 <input
+                  id="destination-input"
                   type="text"
                   required
+                  role="combobox"
+                  aria-expanded={showDestDropdown && destSuggestions.length > 0}
+                  aria-haspopup="listbox"
+                  aria-controls="destination-listbox"
+                  aria-autocomplete="list"
                   placeholder="Type destination jetty or station..."
                   value={destination}
                   onChange={(e) => {
@@ -309,22 +339,26 @@ export default function Home({
                     setShowDestDropdown(true);
                     setShowOriginDropdown(false);
                   }}
+                  onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowDestDropdown(false))}
                   className="w-full bg-white border border-gray-200 focus:border-water-border rounded-xl pl-11 pr-4 py-3.5 text-charcoal text-xs focus:outline-none transition-all"
                 />
               </div>
 
               {/* Suggestions Dropdown overlay */}
               {showDestDropdown && destSuggestions.length > 0 && (
-                <div className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
+                <div id="destination-listbox" role="listbox" aria-label="Destination suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
                   {destSuggestions.map((s, idx) => (
                     <button
                       key={idx}
                       type="button"
+                      role="option"
+                      aria-selected={destination === s.name}
                       onClick={() => {
                         setDestination(s.name);
                         setShowDestDropdown(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
+                      onKeyDown={(e) => e.key === 'Escape' && setShowDestDropdown(false)}
+                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 focus:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
                     >
                       <span className="font-medium">{s.name}</span>
                       <span className="text-[9px] font-bold text-gray-400 uppercase bg-gray-100 px-1.5 py-0.5 rounded">
@@ -345,9 +379,10 @@ export default function Home({
               <button
                 type="button"
                 onClick={() => toggleConstraint('speed')}
+                aria-pressed={constraints.speed}
                 className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
-                  constraints.speed 
-                    ? 'bg-metro-bg border-metro-border text-metro-text font-bold' 
+                  constraints.speed
+                    ? 'bg-metro-bg border-metro-border text-metro-text font-bold'
                     : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                 }`}
               >
@@ -356,9 +391,10 @@ export default function Home({
               <button
                 type="button"
                 onClick={() => toggleConstraint('luggage')}
+                aria-pressed={constraints.luggage}
                 className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
-                  constraints.luggage 
-                    ? 'bg-water-bg border-water-border text-water-text font-bold' 
+                  constraints.luggage
+                    ? 'bg-water-bg border-water-border text-water-text font-bold'
                     : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                 }`}
               >
@@ -367,9 +403,10 @@ export default function Home({
               <button
                 type="button"
                 onClick={() => toggleConstraint('scenic')}
+                aria-pressed={constraints.scenic}
                 className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
-                  constraints.scenic 
-                    ? 'bg-feeder-bg border-feeder-border text-feeder-text font-bold' 
+                  constraints.scenic
+                    ? 'bg-feeder-bg border-feeder-border text-feeder-text font-bold'
                     : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                 }`}
               >
@@ -378,9 +415,10 @@ export default function Home({
               <button
                 type="button"
                 onClick={() => toggleConstraint('lowCost')}
+                aria-pressed={constraints.lowCost}
                 className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
-                  constraints.lowCost 
-                    ? 'bg-fare-bg border-fare-border text-fare-text font-bold' 
+                  constraints.lowCost
+                    ? 'bg-fare-bg border-fare-border text-fare-text font-bold'
                     : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                 }`}
               >
@@ -391,7 +429,7 @@ export default function Home({
 
           {/* Plan error banner */}
           {planError && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+            <div role="alert" className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
               <p className="font-semibold">{planError.message}</p>
               {planError.suggestions?.length > 0 && (
                 <p className="mt-1 text-red-600">
@@ -405,11 +443,12 @@ export default function Home({
           <button
             type="submit"
             disabled={loading}
+            aria-busy={loading}
             className="w-full py-4 bg-charcoal hover:bg-black text-white font-semibold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-black/5 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
           >
             {loading ? (
-              <span className="flex items-center gap-2 text-xs">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span role="status" aria-live="polite" className="flex items-center gap-2 text-xs">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
                 Coordinating transit commute...
               </span>
             ) : (
