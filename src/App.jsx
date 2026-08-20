@@ -104,6 +104,7 @@ export default function App() {
             onReplan={handleReplanRoute}
             loading={loading}
             replanError={replanError}
+            useSimulator={useSimulator}
           />
         )}
       </main>

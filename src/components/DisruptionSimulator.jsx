@@ -1,43 +1,20 @@
-import React, { useState } from 'react';
-import { 
-  AlertTriangle, 
-  ArrowLeft, 
-  CheckCircle, 
-  XCircle, 
+import React, { useState, useEffect } from 'react';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  CheckCircle,
+  XCircle,
   ArrowRight,
-  Clock, 
-  Coins, 
+  Clock,
+  Coins,
   Zap,
   Info,
-  Train, 
-  Ship, 
-  Bus, 
+  Train,
+  Ship,
+  Bus,
   Footprints
 } from 'lucide-react';
-
-const PRESETS = [
-  {
-    id: 'hc_closed',
-    title: 'High Court Jetty Closed',
-    desc: 'Commute Alert: Water Metro suspended at High Court due to low tide silt.',
-    targetRoute: 'Fort Kochi',
-    eventText: 'High Court Water Metro Jetty operations are closed due to shallow channels.'
-  },
-  {
-    id: 'mc3_delayed',
-    title: 'Feeder e-Bus MC-3 Delay',
-    desc: 'Traffic Alert: MC-3 e-Bus delayed by 25 mins on Seaport-Airport Road.',
-    targetRoute: 'Infopark',
-    eventText: 'Feeder Bus MC-3 is delayed by 25 minutes due to roadway gridlock.'
-  },
-  {
-    id: 'vy_closed',
-    title: 'Vyttila Jetty Maintenance',
-    desc: 'Operational Alert: Vyttila Water Metro pontoon maintenance.',
-    targetRoute: 'Kakkanad',
-    eventText: 'Vyttila Water Metro Jetty is closed for loading platform servicing.'
-  }
-];
+import { fetchDisruptions } from '../services/disruptions.js';
 
 const MODE_ICONS = {
   metro: Train,
@@ -52,9 +29,26 @@ export default function DisruptionSimulator({
   onBack,
   onReplan,
   loading,
-  replanError
+  replanError,
+  useSimulator
 }) {
   const [activeDisruption, setActiveDisruption] = useState(null);
+  const [disruptions, setDisruptions] = useState([]);
+  const [feedLoading, setFeedLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFeedLoading(true);
+    fetchDisruptions(useSimulator).then((live) => {
+      if (!cancelled) {
+        setDisruptions(live);
+        setFeedLoading(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [useSimulator]);
 
   const handleTriggerPreset = async (preset) => {
     setActiveDisruption(preset);
@@ -63,7 +57,7 @@ export default function DisruptionSimulator({
 
   const getActivePresets = () => {
     const destination = (itinerary?.legs[itinerary.legs.length - 1]?.to || '').toLowerCase();
-    return [...PRESETS].sort((a, b) => {
+    return [...disruptions].sort((a, b) => {
       const aMatch = destination.includes(a.targetRoute.toLowerCase());
       const bMatch = destination.includes(b.targetRoute.toLowerCase());
       return bMatch - aMatch;
@@ -71,6 +65,19 @@ export default function DisruptionSimulator({
   };
 
   const activePresets = getActivePresets();
+
+  // A leg is "blocked" by the active disruption if the event text mentions
+  // the stops or route name it runs on — generalizes across any live/mock
+  // disruption instead of matching a fixed set of preset ids.
+  const isLegBlockedByDisruption = (leg) => {
+    if (!activeDisruption) return false;
+    const text = activeDisruption.eventText.toLowerCase();
+    return (
+      text.includes(leg.from.toLowerCase())
+      || text.includes(leg.to.toLowerCase())
+      || text.includes(leg.name.toLowerCase())
+    );
+  };
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-8 animate-fadeIn">
@@ -92,35 +99,39 @@ export default function DisruptionSimulator({
         </p>
 
         {/* Presets List */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {activePresets.map((preset) => {
-            const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
-              .toLowerCase()
-              .includes(preset.targetRoute.toLowerCase());
+        {feedLoading ? (
+          <div className="text-xs text-gray-400 py-6 text-center">Checking live network conditions...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {activePresets.map((preset) => {
+              const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
+                .toLowerCase()
+                .includes(preset.targetRoute.toLowerCase());
 
-            return (
-              <button
-                key={preset.id}
-                onClick={() => handleTriggerPreset(preset)}
-                className={`text-left p-4 rounded-2xl border transition-all cursor-pointer ${
-                  activeDisruption?.id === preset.id
-                    ? 'bg-red-100/30 border-red-400'
-                    : 'bg-white border-gray-200 hover:bg-gray-50'
-                } relative`}
-              >
-                {isTargeted && (
-                  <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-bold uppercase">
-                    Suggested
-                  </span>
-                )}
-                <h4 className="text-xs font-bold text-charcoal mb-1 flex items-center gap-1.5">
-                  {preset.title}
-                </h4>
-                <p className="text-[11px] text-gray-500 leading-normal">{preset.desc}</p>
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={preset.id}
+                  onClick={() => handleTriggerPreset(preset)}
+                  className={`text-left p-4 rounded-2xl border transition-all cursor-pointer ${
+                    activeDisruption?.id === preset.id
+                      ? 'bg-red-100/30 border-red-400'
+                      : 'bg-white border-gray-200 hover:bg-gray-50'
+                  } relative`}
+                >
+                  {isTargeted && (
+                    <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-bold uppercase">
+                      Suggested
+                    </span>
+                  )}
+                  <h4 className="text-xs font-bold text-charcoal mb-1 flex items-center gap-1.5">
+                    {preset.title}
+                  </h4>
+                  <p className="text-[11px] text-gray-500 leading-normal">{preset.eventText}</p>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Loader */}
@@ -167,11 +178,7 @@ export default function DisruptionSimulator({
             {/* Original Legs in Connected Timeline */}
             <div className="relative pl-6 border-l border-red-200 ml-4 space-y-5 py-2">
               {itinerary?.legs.map((leg, idx) => {
-                const isLegBlocked = 
-                  (leg.mode === 'water_metro' && activeDisruption.id === 'hc_closed' && leg.from.includes('High Court')) ||
-                  (leg.mode === 'water_metro' && activeDisruption.id === 'vy_closed' && leg.from.includes('Vyttila')) ||
-                  (leg.mode === 'feeder_bus' && activeDisruption.id === 'mc3_delayed' && leg.name.includes('MC-3'));
-
+                const isLegBlocked = isLegBlockedByDisruption(leg);
                 const Icon = MODE_ICONS[leg.mode] || Footprints;
 
                 return (
