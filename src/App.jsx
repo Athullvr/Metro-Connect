@@ -16,12 +16,15 @@ export default function App() {
 
   const [useSimulator, setUseSimulator] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [planError, setPlanError] = useState(null);
+  const [replanError, setReplanError] = useState(null);
 
   const handlePlanRoute = async (src, dest, activeConstraints) => {
     setOrigin(src);
     setDestination(dest);
     setConstraints(activeConstraints);
     setLoading(true);
+    setPlanError(null);
 
     try {
       const plan = await planRoute(src, dest, activeConstraints, useSimulator);
@@ -30,6 +33,7 @@ export default function App() {
       setScreen('itinerary');
     } catch (err) {
       console.error(err);
+      setPlanError({ message: err.message, suggestions: err.suggestions || [] });
     } finally {
       setLoading(false);
     }
@@ -37,11 +41,13 @@ export default function App() {
 
   const handleReplanRoute = async (disruptionText) => {
     setLoading(true);
+    setReplanError(null);
     try {
       const replan = await replanRoute(itinerary, disruptionText, useSimulator);
       setReroutedItinerary(replan);
     } catch (err) {
       console.error(err);
+      setReplanError(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,6 +84,7 @@ export default function App() {
             onPlan={handlePlanRoute}
             useSimulator={useSimulator}
             setUseSimulator={setUseSimulator}
+            planError={planError}
           />
         )}
 
@@ -90,12 +97,13 @@ export default function App() {
         )}
 
         {screen === 'disruption' && (
-          <DisruptionSimulator 
+          <DisruptionSimulator
             itinerary={itinerary}
             reroutedItinerary={reroutedItinerary}
             onBack={() => setScreen('itinerary')}
             onReplan={handleReplanRoute}
             loading={loading}
+            replanError={replanError}
           />
         )}
       </main>

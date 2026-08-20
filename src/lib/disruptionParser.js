@@ -20,16 +20,27 @@ function coreName(name) {
     .trim();
 }
 
+// After suffix-stripping, a place like "Vyttila" (metro station) and
+// "Vyttila Jetty" (water metro) collapse to the same core name "vyttila" —
+// stripping loses which facility the text actually meant. Use whether the
+// text mentions water-metro vs. rail-metro vocabulary to disambiguate.
+const WATER_METRO_HINTS = /\b(jetty|water metro|ferry|sailing|catamaran)\b/;
+const RAIL_METRO_HINTS = /\b(metro station|blue line|train)\b/;
+
 export function parseDisruption(disruptionText) {
   const text = (disruptionText || '').toLowerCase();
   const blockedNodeIds = new Set();
   const blockedRouteIds = new Set();
 
+  const mentionsWaterMetro = WATER_METRO_HINTS.test(text);
+  const mentionsRailMetro = RAIL_METRO_HINTS.test(text);
+
   for (const node of getAllNodes()) {
     const core = coreName(node.name);
-    if (core.length >= 4 && text.includes(core)) {
-      blockedNodeIds.add(node.id);
-    }
+    if (core.length < 4 || !text.includes(core)) continue;
+    if (node.kind === 'metro' && mentionsWaterMetro && !mentionsRailMetro) continue;
+    if (node.kind === 'water_metro' && mentionsRailMetro && !mentionsWaterMetro) continue;
+    blockedNodeIds.add(node.id);
   }
 
   const routes = [...transitData.water_metro.routes, ...transitData.feeder_buses];

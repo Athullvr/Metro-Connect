@@ -36,7 +36,8 @@ const SUGGESTIONS = [
 export default function Home({
   onPlan,
   useSimulator,
-  setUseSimulator
+  setUseSimulator,
+  planError
 }) {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -341,6 +342,18 @@ export default function Home({
               </button>
             </div>
           </div>
+
+          {/* Plan error banner */}
+          {planError && (
+            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+              <p className="font-semibold">{planError.message}</p>
+              {planError.suggestions?.length > 0 && (
+                <p className="mt-1 text-red-600">
+                  Did you mean: {planError.suggestions.join(', ')}?
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Submit Button */}
           <button

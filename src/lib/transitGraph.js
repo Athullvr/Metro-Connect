@@ -137,7 +137,23 @@ export function buildGraph() {
     }
   });
 
-  // 4. Walk connections
+  // 4. Road links — real KSRTC/auto-rickshaw connections that provide
+  // redundancy the metro/water-metro/feeder data alone doesn't model (e.g.
+  // the Goshree bridges road route into Fort Kochi). Modeled as their own
+  // edges rather than folded into feeder_buses since they aren't KMRL feeder
+  // services.
+  (transitData.road_links || []).forEach((link) => {
+    addEdge(link.from, link.to, {
+      mode: 'feeder_bus',
+      name: link.name,
+      routeId: link.id,
+      duration: link.duration_min,
+      cost: link.price_inr,
+      details: `${link.name}. Departures every ${link.frequency_min} min.`
+    });
+  });
+
+  // 5. Walk connections
   (transitData.walk_connections || []).forEach((walk) => {
     if (!nodes.has(walk.from)) addNode(walk.from, humanize(walk.from), 'walk');
     if (!nodes.has(walk.to)) addNode(walk.to, humanize(walk.to), 'walk');

@@ -46,12 +46,13 @@ const MODE_ICONS = {
   walk: Footprints
 };
 
-export default function DisruptionSimulator({ 
-  itinerary, 
-  reroutedItinerary, 
-  onBack, 
-  onReplan, 
-  loading 
+export default function DisruptionSimulator({
+  itinerary,
+  reroutedItinerary,
+  onBack,
+  onReplan,
+  loading,
+  replanError
 }) {
   const [activeDisruption, setActiveDisruption] = useState(null);
 
@@ -134,6 +135,15 @@ export default function DisruptionSimulator({
           <p className="text-xs text-gray-500">
             Adapter Agent mapping alternative feeder buses and transfer routes...
           </p>
+        </div>
+      )}
+
+      {/* Replan error */}
+      {!loading && replanError && (
+        <div className="clean-card rounded-3xl p-6 border border-red-200 bg-red-50/30 text-center">
+          <XCircle className="mx-auto mb-2 text-red-600" size={20} />
+          <h3 className="text-sm font-bold text-charcoal mb-1">No alternative route found</h3>
+          <p className="text-xs text-gray-500">{replanError}</p>
         </div>
       )}
 
