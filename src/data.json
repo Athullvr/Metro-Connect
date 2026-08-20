@@ -41,7 +41,9 @@
       { "id": "kakkanad_jetty", "name": "Kakkanad Jetty", "lat": 9.9926, "lng": 76.3533 },
       { "id": "south_chittoor", "name": "South Chittoor Jetty", "lat": 10.0289, "lng": 76.2731 },
       { "id": "bolgatty", "name": "Bolgatty Jetty", "lat": 9.9867, "lng": 76.2682 },
-      { "id": "eloor", "name": "Eloor Jetty", "lat": 10.0652, "lng": 76.2995 }
+      { "id": "eloor", "name": "Eloor Jetty", "lat": 10.0652, "lng": 76.2995 },
+      { "id": "willingdon_island", "name": "Willingdon Island Jetty", "lat": 9.966, "lng": 76.2731 },
+      { "id": "mattancherry", "name": "Mattancherry Jetty", "lat": 9.9578, "lng": 76.2591 }
     ],
     "routes": [
       {
@@ -87,6 +89,17 @@
         "frequency_min": 30,
         "operating_hours": "08:00 - 19:30",
         "price_inr": 35
+      },
+      {
+        "id": "hc_wi_mt",
+        "name": "High Court - Willingdon Island - Mattancherry",
+        "from": "high_court",
+        "to": "mattancherry",
+        "stops": ["high_court", "willingdon_island", "mattancherry"],
+        "duration_min": 25,
+        "frequency_min": 20,
+        "operating_hours": "07:30 - 20:30",
+        "price_inr": 30
       }
     ]
   },
@@ -154,6 +167,13 @@
     { "from": "mg_road", "to": "high_court", "distance_meters": 1200, "duration_min": 15 },
     { "from": "vyttila", "to": "vyttila_jetty", "distance_meters": 300, "duration_min": 4 },
     { "from": "kalamassery", "to": "hmt_junction", "distance_meters": 800, "duration_min": 10 },
-    { "from": "fort_kochi", "to": "fort_kochi_jetty", "distance_meters": 600, "duration_min": 8 }
+    { "from": "fort_kochi", "to": "fort_kochi_town", "distance_meters": 600, "duration_min": 8 }
+  ],
+  "landmarks": [
+    { "query": "Fort Kochi", "node_id": "fort_kochi" },
+    { "query": "Mattancherry Palace", "node_id": "mattancherry" },
+    { "query": "Marine Drive", "node_id": "high_court" },
+    { "query": "Infopark", "node_id": "infopark_phase_1" },
+    { "query": "Kochi Airport", "node_id": "cial_airport_terminal_3" }
   ]
 }
