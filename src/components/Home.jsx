@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  MapPin, 
-  Settings, 
-  Wifi, 
-  WifiOff, 
-  Compass, 
-  Briefcase, 
-  TrendingDown, 
-  Activity, 
-  Search 
+import {
+  MapPin,
+  Settings,
+  Wifi,
+  WifiOff,
+  Compass,
+  Briefcase,
+  TrendingDown,
+  Activity,
+  Search,
+  LocateFixed
 } from 'lucide-react';
 import transitData from '../data.json';
+import { detectNearestStation } from '../lib/geolocation.js';
 
 const SUGGESTIONS = [
   {
@@ -52,6 +54,23 @@ export default function Home({
 
   const originRef = useRef(null);
   const destRef = useRef(null);
+
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+
+  const handleUseMyLocation = async () => {
+    setLocating(true);
+    setLocationError(null);
+    try {
+      const { node } = await detectNearestStation();
+      setOrigin(node.name);
+      setShowOriginDropdown(false);
+    } catch (err) {
+      setLocationError(err.message);
+    } finally {
+      setLocating(false);
+    }
+  };
 
   // Constraints
   const [constraints, setConstraints] = useState({
@@ -202,7 +221,19 @@ export default function Home({
             
             {/* Origin Autocomplete Input */}
             <div ref={originRef} className="relative">
-              <label className="block text-[10px] text-metro-text font-bold tracking-wider uppercase mb-1.5">Starting Station</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-[10px] text-metro-text font-bold tracking-wider uppercase">Starting Station</label>
+                <button
+                  type="button"
+                  onClick={handleUseMyLocation}
+                  disabled={locating}
+                  className="flex items-center gap-1 text-[9px] font-bold text-metro-text hover:text-charcoal transition-all cursor-pointer disabled:opacity-50"
+                  title="Detect the nearest station from your current location"
+                >
+                  <LocateFixed size={11} className={locating ? 'animate-pulse' : ''} />
+                  {locating ? 'Locating...' : 'Use my location'}
+                </button>
+              </div>
               <div className="relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-metro-text" size={16} />
                 <input
@@ -221,6 +252,9 @@ export default function Home({
                   className="w-full bg-white border border-gray-200 focus:border-metro-border rounded-xl pl-11 pr-4 py-3.5 text-charcoal text-xs focus:outline-none transition-all"
                 />
               </div>
+              {locationError && (
+                <p className="text-[10px] text-red-500 mt-1">{locationError}</p>
+              )}
 
               {/* Suggestions Dropdown overlay */}
               {showOriginDropdown && originSuggestions.length > 0 && (

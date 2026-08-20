@@ -47,9 +47,9 @@ export function buildGraph() {
   const nodes = new Map(); // id -> { id, name, kind }
   const adjacency = new Map(); // id -> [{ to, mode, name, duration, cost, details, routeId }]
 
-  const addNode = (id, name, kind) => {
+  const addNode = (id, name, kind, lat, lng) => {
     if (!nodes.has(id)) {
-      nodes.set(id, { id, name, kind });
+      nodes.set(id, { id, name, kind, lat, lng });
       adjacency.set(id, []);
     }
     return id;
@@ -62,7 +62,7 @@ export function buildGraph() {
 
   // 1. Metro stations
   const stations = [...transitData.metro_line.stations].sort((a, b) => a.order - b.order);
-  stations.forEach((s) => addNode(s.id, s.name, 'metro'));
+  stations.forEach((s) => addNode(s.id, s.name, 'metro', s.lat, s.lng));
   for (let i = 0; i < stations.length - 1; i++) {
     addEdge(stations[i].id, stations[i + 1].id, {
       mode: 'metro',
@@ -74,7 +74,7 @@ export function buildGraph() {
   }
 
   // 2. Water Metro jetties
-  transitData.water_metro.jetties.forEach((j) => addNode(j.id, j.name, 'water_metro'));
+  transitData.water_metro.jetties.forEach((j) => addNode(j.id, j.name, 'water_metro', j.lat, j.lng));
 
   const jettyMatchForms = (jetty) => {
     const base = normalize(jetty.name).replace(/ jetty$/, '');
