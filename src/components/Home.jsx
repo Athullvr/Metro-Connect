@@ -33,12 +33,10 @@ const SUGGESTIONS = [
   }
 ];
 
-export default function Home({ 
-  onPlan, 
-  apiKey, 
-  setApiKey, 
-  useSimulator, 
-  setUseSimulator 
+export default function Home({
+  onPlan,
+  useSimulator,
+  setUseSimulator
 }) {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
@@ -157,53 +155,42 @@ export default function Home({
           </button>
         </div>
 
-        {/* API Settings */}
+        {/* Engine Settings */}
         {showSettings && (
           <div className="mb-6 p-4 rounded-2xl bg-gray-50 border border-gray-200 animate-fadeIn">
             <h3 className="text-xs font-bold text-charcoal mb-3 flex items-center gap-2">
               <Settings size={14} className="text-metro-text" /> Copilot Agent Configuration
             </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[10px] text-gray-500 mb-1 font-semibold uppercase">Copilot Engine Mode</label>
-                <div className="flex bg-gray-200/50 p-1 rounded-xl border border-gray-200">
-                  <button
-                    type="button"
-                    onClick={() => setUseSimulator(true)}
-                    className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                      useSimulator 
-                        ? 'bg-white text-charcoal shadow-sm' 
-                        : 'text-gray-500 hover:text-gray-800'
-                    }`}
-                  >
-                    <WifiOff size={11} /> Local Simulator
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUseSimulator(false)}
-                    className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
-                      !useSimulator 
-                        ? 'bg-white text-charcoal shadow-sm' 
-                        : 'text-gray-500 hover:text-gray-800'
-                    }`}
-                  >
-                    <Wifi size={11} /> OpenAI API
-                  </button>
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-[10px] text-gray-500 mb-1 font-semibold uppercase">OpenAI API Key</label>
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk-proj-..."
-                  disabled={useSimulator}
-                  className="w-full text-xs bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-charcoal placeholder-gray-400 focus:outline-none focus:border-metro-border transition-all disabled:opacity-50"
-                />
+            <div>
+              <label className="block text-[10px] text-gray-500 mb-1 font-semibold uppercase">Copilot Engine Mode</label>
+              <div className="flex bg-gray-200/50 p-1 rounded-xl border border-gray-200">
+                <button
+                  type="button"
+                  onClick={() => setUseSimulator(true)}
+                  className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                    useSimulator
+                      ? 'bg-white text-charcoal shadow-sm'
+                      : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                >
+                  <WifiOff size={11} /> Local Simulator
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setUseSimulator(false)}
+                  className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                    !useSimulator
+                      ? 'bg-white text-charcoal shadow-sm'
+                      : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                >
+                  <Wifi size={11} /> Live Copilot
+                </button>
               </div>
+              <p className="text-[10px] text-gray-400 mt-2">
+                Live Copilot calls our server-side planning agent — no API key needed on your end.
+              </p>
             </div>
           </div>
         )}

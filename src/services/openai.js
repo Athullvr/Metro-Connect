@@ -1,61 +1,3 @@
-import transitData from '../data.json';
-
-// System prompts for the OpenAI API
-const PLANNER_SYSTEM_PROMPT = `
-You are the Kochi Metro Connect Copilot, a multimodal transit planning agent.
-You are given the following static transit data for Kochi Metro (Blue Line), Water Metro, and MetroConnect Feeder Buses:
-${JSON.stringify(transitData, null, 2)}
-
-Your task is to plan an optimal, step-by-step multimodal itinerary for the user.
-You MUST respond with a valid JSON object matching the schema below. Do not output markdown, preambles, or explanations outside the JSON object.
-
-JSON Schema:
-{
-  "legs": [
-    {
-      "mode": "metro" | "water_metro" | "feeder_bus" | "walk",
-      "name": "Line or Route Name",
-      "from": "Origin Stop Name",
-      "to": "Destination Stop Name",
-      "duration": 15, // in minutes
-      "cost": 30, // in INR
-      "details": "Details about stops, frequency, or directions"
-    }
-  ],
-  "total_duration": 45, // sum of leg durations in minutes
-  "total_cost": 65, // sum of leg costs in INR
-  "explanation": "A concise, 1-2 sentence explanation of why this route was chosen and its benefits (e.g., speed, avoiding congestion, beautiful views)."
-}
-`;
-
-const ADAPTER_SYSTEM_PROMPT = `
-You are the Kochi Metro Connect Adapter Agent.
-You are given the following static transit data:
-${JSON.stringify(transitData, null, 2)}
-
-The user has an active itinerary and has encountered a disruption.
-You must re-plan the itinerary starting from their current location, avoiding the disrupted route or station.
-You MUST respond with a valid JSON object matching the schema below. Do not output markdown or explanation text outside the JSON.
-
-JSON Schema:
-{
-  "legs": [
-    {
-      "mode": "metro" | "water_metro" | "feeder_bus" | "walk",
-      "name": "Line or Route Name",
-      "from": "Origin Stop Name",
-      "to": "Destination Stop Name",
-      "duration": 15,
-      "cost": 30,
-      "details": "Details about stops, frequency, or directions"
-    }
-  ],
-  "total_duration": 50,
-  "total_cost": 80,
-  "explanation": "What changed due to the disruption, why this new route was selected, and how much delay/extra cost is incurred."
-}
-`;
-
 // Helper: Local Simulator for offline capability
 const getLocalPlannedRoute = (origin, destination, constraints = {}) => {
   const normOrigin = origin.toLowerCase().trim();
@@ -335,42 +277,28 @@ const getLocalReplannedRoute = (currentItinerary, disruptionType) => {
 
 /**
  * Plans a route from origin to destination.
- * Can use live OpenAI API if key is provided and useSimulator is false.
+ * Can use the live Copilot proxy if useSimulator is false. The proxy holds the
+ * OpenAI API key server-side — the browser never sees or sends it.
  */
-export const planRoute = async (origin, destination, constraints = '', apiKey = '', useSimulator = true) => {
-  if (useSimulator || !apiKey) {
+export const planRoute = async (origin, destination, constraints = '', useSimulator = true) => {
+  if (useSimulator) {
     // Artificial latency for visual feel
     await new Promise((resolve) => setTimeout(resolve, 1500));
     return getLocalPlannedRoute(origin, destination, constraints);
   }
 
   try {
-    const userPrompt = `Origin: ${origin}\nDestination: ${destination}\nConstraints: ${JSON.stringify(constraints)}`;
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/plan', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: PLANNER_SYSTEM_PROMPT },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.2,
-        response_format: { type: "json_object" }
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ origin, destination, constraints })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API Error: ${response.statusText}`);
+      throw new Error(`Planner proxy error: ${response.status}`);
     }
 
-    const data = await response.json();
-    const resultText = data.choices[0].message.content;
-    return JSON.parse(resultText);
+    return await response.json();
   } catch (error) {
     console.error('Planner Agent failed, falling back to Simulator:', error);
     return getLocalPlannedRoute(origin, destination, constraints);
@@ -380,39 +308,24 @@ export const planRoute = async (origin, destination, constraints = '', apiKey = 
 /**
  * Reroutes an itinerary in response to a disruption.
  */
-export const replanRoute = async (currentItinerary, disruption, apiKey = '', useSimulator = true) => {
-  if (useSimulator || !apiKey) {
+export const replanRoute = async (currentItinerary, disruption, useSimulator = true) => {
+  if (useSimulator) {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     return getLocalReplannedRoute(currentItinerary, disruption);
   }
 
   try {
-    const userPrompt = `Current Itinerary:\n${JSON.stringify(currentItinerary, null, 2)}\n\nDisruption Event:\n${disruption}`;
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/replan', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: ADAPTER_SYSTEM_PROMPT },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.2,
-        response_format: { type: "json_object" }
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itinerary: currentItinerary, disruption })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API Error: ${response.statusText}`);
+      throw new Error(`Adapter proxy error: ${response.status}`);
     }
 
-    const data = await response.json();
-    const resultText = data.choices[0].message.content;
-    return JSON.parse(resultText);
+    return await response.json();
   } catch (error) {
     console.error('Adapter Agent failed, falling back to Simulator:', error);
     return getLocalReplannedRoute(currentItinerary, disruption);

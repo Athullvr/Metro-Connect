@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Home from './components/Home';
 import Itinerary from './components/Itinerary';
 import DisruptionSimulator from './components/DisruptionSimulator';
@@ -13,25 +13,18 @@ export default function App() {
   
   const [itinerary, setItinerary] = useState(null);
   const [reroutedItinerary, setReroutedItinerary] = useState(null);
-  
-  // API Config
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('metro_connect_api_key') || '');
+
   const [useSimulator, setUseSimulator] = useState(true);
   const [loading, setLoading] = useState(false);
-
-  // Sync API Key to localStorage
-  useEffect(() => {
-    localStorage.setItem('metro_connect_api_key', apiKey);
-  }, [apiKey]);
 
   const handlePlanRoute = async (src, dest, activeConstraints) => {
     setOrigin(src);
     setDestination(dest);
     setConstraints(activeConstraints);
     setLoading(true);
-    
+
     try {
-      const plan = await planRoute(src, dest, activeConstraints, apiKey, useSimulator);
+      const plan = await planRoute(src, dest, activeConstraints, useSimulator);
       setItinerary(plan);
       setReroutedItinerary(null); // Clear any old reroutes
       setScreen('itinerary');
@@ -45,7 +38,7 @@ export default function App() {
   const handleReplanRoute = async (disruptionText) => {
     setLoading(true);
     try {
-      const replan = await replanRoute(itinerary, disruptionText, apiKey, useSimulator);
+      const replan = await replanRoute(itinerary, disruptionText, useSimulator);
       setReroutedItinerary(replan);
     } catch (err) {
       console.error(err);
@@ -81,10 +74,8 @@ export default function App() {
       {/* Main Content Viewport */}
       <main className="flex-grow flex flex-col items-center justify-center">
         {screen === 'home' && (
-          <Home 
+          <Home
             onPlan={handlePlanRoute}
-            apiKey={apiKey}
-            setApiKey={setApiKey}
             useSimulator={useSimulator}
             setUseSimulator={setUseSimulator}
           />
