@@ -4,62 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#173f59" />
-    <meta name="description" content="Metro Connect — a calm, practical Kochi transit copilot." />
-    <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./styles.css" />
+    <meta name="description" content="Metro Connect — a calm, practical Kochi multimodal transit copilot." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <title>Metro Connect — Kochi, connected</title>
   </head>
   <body>
-    <div class="statusbar"><span class="status-dot"></span><span id="statusText">All planned services running</span><button id="debugToggle">Service controls</button></div>
-    <header class="nav wrap">
-      <a class="brand" href="#top" aria-label="Metro Connect home"><span>m</span>metro<br>connect</a>
-      <nav><a href="#planner">Plan a trip</a><a href="#first-time">First time here?</a><a href="#faq">FAQ</a></nav>
-      <button class="language" id="languageToggle" aria-label="Switch language">മ <span>EN</span></button>
-    </header>
-
-    <main id="top">
-      <section class="hero wrap">
-        <div class="hero-copy reveal">
-          <p class="eyebrow">KOCHI, MADE LEGIBLE</p>
-          <h1>Where are you<br><em>headed?</em></h1>
-          <p class="lede">One quiet plan across the Metro, Water Metro and the last mile — with real connections, real stations, and no guesswork.</p>
-          <a class="button" href="#planner">Plan a journey <span>→</span></a>
-          <p class="micro">Blue Line · 25 stations · Water Metro · 6 live routes</p>
-        </div>
-        <figure class="hero-image reveal"><img src="./images/kochi-water-metro.png" alt="A Water Metro ferry travelling across Kochi's backwaters" /><figcaption>WATERWAYS, NOT WAITING ROOMS</figcaption></figure>
-      </section>
-
-      <section class="planner-section" id="planner">
-        <div class="wrap planner-layout">
-          <div><p class="eyebrow">YOUR ROUTE, IN PLAIN LANGUAGE</p><h2>Three modes.<br><em>One journey.</em></h2><p>Start with a station, terminal, or one of Kochi’s familiar landmarks. We’ll handle the handoff.</p></div>
-          <form class="planner-card" id="tripForm">
-            <label>From <input id="origin" list="places" value="Aluva" required /></label>
-            <label>To <input id="destination" list="places" value="Fort Kochi" required /></label>
-            <datalist id="places"></datalist>
-            <button class="button" type="submit">Find my route <span>→</span></button>
-            <p class="hint">Try: Aluva → Fort Kochi · Vyttila → Kakkanad · JLN Stadium → Infopark</p>
-          </form>
-        </div>
-      </section>
-
-      <section class="result wrap" id="routeResult" aria-live="polite" hidden>
-        <div class="result-head"><div><p class="eyebrow">YOUR CONNECTED ROUTE</p><h2 id="routeTitle"></h2></div><button class="share" id="shareTrip">Share route ↗</button></div>
-        <div class="alert" id="disruption" hidden></div>
-        <div class="result-grid"><div class="legs" id="legs"></div><aside><p class="eyebrow">ESTIMATED TOTAL</p><strong id="totalFare">₹0</strong><p id="totalTime"></p><hr><p id="kochiNote">Kochi1 works on Metro and Water Metro. It can save about 20% on eligible fares; tokens, UPI and WhatsApp tickets are also available for Metro trips.</p></aside></div>
-      </section>
-
-      <section class="story wrap reveal" id="first-time"><div class="story-photo"></div><div><p class="eyebrow">FIRST TIME IN KOCHI?</p><h2>Let the city<br><em>unfold slowly.</em></h2><p>Two compact loops using the routes that are actually running — room for the ferry breeze, Fort Kochi lanes, and a good coffee.</p><div class="tabs"><button class="tour active" data-tour="day1">1 DAY</button><button class="tour" data-tour="day2">2 DAYS</button></div><article id="tourDetail"></article></div></section>
-
-      <section class="modes wrap reveal"><p class="eyebrow">A BETTER TRANSFER</p><h2>The best route is<br><em>rarely one line.</em></h2><div class="mode-grid"><article><b>01 / METRO</b><p>Blue Line, Aluva to Tripunithura. Fast, air-conditioned, and designed for the long stretch.</p></article><article><b>02 / WATER METRO</b><p>Six operational water routes, including Fort Kochi, Vypin, Vyttila, Kakkanad and Mattancherry.</p></article><article><b>03 / FEEDER</b><p>Short connector rides from the station to the places rail does not quite reach — including Infopark.</p></article></div></section>
-
-      <section class="card-band"><div class="wrap card-band-inner"><p class="eyebrow">ONE CARD, LESS FRICTION</p><h2>Meet Kochi1.</h2><p>One smartcard for the Metro and Water Metro, plus select KSRTC buses. It offers roughly 20% off eligible fares — useful when the journey has more than one chapter.</p></div></section>
-
-      <section class="faq wrap reveal" id="faq"><div><p class="eyebrow">GOOD TO KNOW</p><h2>Questions before<br><em>you set off.</em></h2></div><div class="faq-list"><details open><summary>How do Metro fares work?<span>+</span></summary><p>The Blue Line uses distance zones: ₹10 up to 2 km, then ₹20, ₹30, ₹40, ₹50 and ₹60 above 20 km. This planner estimates a zone from the real station order.</p></details><details><summary>Is the Water Metro tourist-friendly?<span>+</span></summary><p>Yes. Fort Kochi is on the operating High Court ↔ Fort Kochi route. Services typically run at 10–20 minute headways; allow a little extra time for the next sailing.</p></details><details><summary>What time does the Metro run?<span>+</span></summary><p>Monday–Saturday, 6:00 AM–10:30 PM. On Sundays it starts at 7:30 AM. Check the current operator notice before a late journey.</p></details><details><summary>Is it safe and simple to switch modes?<span>+</span></summary><p>Vyttila Mobility Hub is the straightforward integrated interchange. For Fort Kochi, the planner explains the short Ernakulam South → jetty connection in plain language.</p></details></div></section>
-    </main>
-    <footer><div class="wrap"><a class="brand" href="#top"><span>m</span>metro<br>connect</a><p>A calmer way to move through Kochi.</p></div></footer>
-    <dialog id="debug"><form method="dialog"><button class="close">×</button><p class="eyebrow">DEBUG / SERVICE STATUS</p><h2>Test a reroute</h2><label class="check"><input id="vytDelay" type="checkbox"> Delay Vyttila ↔ Kakkanad</label><label class="check"><input id="fortDelay" type="checkbox"> Delay High Court ↔ Fort Kochi</label><button class="button" value="close">Done</button></form></dialog>
-    <div class="toast" id="toast"></div>
-    <script type="module" src="./app.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
