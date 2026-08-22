@@ -16,6 +16,7 @@
 
     "allowJs": true,
     "checkJs": false,
+    "types": ["vite/client"],
 
     "strict": false,
     "noUnusedLocals": false,
