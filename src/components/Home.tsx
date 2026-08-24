@@ -18,6 +18,7 @@ import {
 import transitData from '../data.json';
 import { detectNearestStation } from '../lib/geolocation.js';
 import { getTrips, clearTrips } from '../lib/tripHistory.js';
+import NetworkMapModal from './NetworkMapModal';
 
 const SUGGESTIONS = [
   {
@@ -60,8 +61,17 @@ export default function Home({
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [showSettings, setShowSettings] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
   const [loading, setLoading] = useState(false);
   
+  const handleSelectFromMap = (stationName, target) => {
+    if (target === 'origin') {
+      setOrigin(stationName);
+    } else {
+      setDestination(stationName);
+    }
+  };
+
   // Search Autocomplete States
   const [originSuggestions, setOriginSuggestions] = useState([]);
   const [destSuggestions, setDestSuggestions] = useState([]);
@@ -201,8 +211,16 @@ export default function Home({
       {/* Main Glassmorphic Planner Card */}
       <div className="glass-card rounded-3xl p-6 md:p-8 relative z-30">
         
-        {/* Settings Toggle */}
+        {/* Top Header Actions (Stations Map Explorer + Engine Settings) */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowMapModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold border border-teal-200 transition-all cursor-pointer shadow-2xs"
+            title="Open interactive transit network station explorer"
+          >
+            <Compass size={13} /> Stations Explorer
+          </button>
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="p-2 rounded-xl bg-slate-100/70 hover:bg-slate-200/70 text-slate-500 transition-all border border-slate-200/60 cursor-pointer"
@@ -672,6 +690,13 @@ export default function Home({
           </div>
         </div>
       </div>
+
+      {/* Network Map & Stations Explorer Modal */}
+      <NetworkMapModal
+        isOpen={showMapModal}
+        onClose={() => setShowMapModal(false)}
+        onSelectStation={handleSelectFromMap}
+      />
 
     </div>
   );

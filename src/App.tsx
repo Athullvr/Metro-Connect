@@ -83,6 +83,41 @@ export default function App() {
           </div>
         </button>
 
+        {/* Center Navigation Screen Pills */}
+        <div className="hidden sm:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/60 shadow-2xs">
+          <button
+            type="button"
+            onClick={() => setScreen('home')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              screen === 'home' || screen === 'itinerary'
+                ? 'bg-white text-teal-800 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            Journey Planner
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!itinerary) {
+                // Pre-seed a default sample commute if none planned yet
+                handlePlanRoute('Aluva', 'Fort Kochi', { speed: true }).then(() => {
+                  setScreen('disruption');
+                });
+              } else {
+                setScreen('disruption');
+              }
+            }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              screen === 'disruption'
+                ? 'bg-white text-rose-700 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            Disruption Simulator
+          </button>
+        </div>
+
         {/* Live Engine Status Badge */}
         <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200/80 px-3 py-1.5 rounded-full backdrop-blur-sm shadow-xs">
           <span
