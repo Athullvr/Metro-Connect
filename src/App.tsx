@@ -22,7 +22,7 @@ export default function App() {
     try {
       const plan = await planRoute(src, dest, activeConstraints, useSimulator);
       setItinerary(plan);
-      setReroutedItinerary(null); // Clear any old reroutes
+      setReroutedItinerary(null);
       setScreen('itinerary');
       saveTrip({ origin: src, destination: dest, constraints: activeConstraints, itinerary: plan, timestamp: Date.now() });
     } catch (err) {
@@ -54,20 +54,18 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-slate-800 flex flex-col font-sans select-none relative">
-      {/* Atmospheric Ambient Glow Layer */}
-      <div className="ambient-bg" aria-hidden="true" />
-
-      {/* Top Navbar with Frosted Glass */}
-      <header className="glass-header sticky top-0 z-50 px-5 md:px-8 py-3.5 flex items-center justify-between">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col font-sans select-none">
+      
+      {/* Official KMRL Transit Header */}
+      <header className="transit-header sticky top-0 z-50 px-4 md:px-8 py-3 flex items-center justify-between border-b border-slate-200">
         <button
           type="button"
-          className="flex items-center gap-3 cursor-pointer text-left group transition-all"
+          className="flex items-center gap-3 cursor-pointer text-left group"
           onClick={() => setScreen('home')}
-          aria-label="Go to home screen"
+          aria-label="Go to journey planner"
         >
-          {/* Kochi Transit Compass Logo */}
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 via-teal-700 to-sky-700 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform" aria-hidden="true">
+          {/* KMRL Aquamarine Badge Logo */}
+          <div className="w-8 h-8 rounded-lg bg-[#00A19C] flex items-center justify-center text-white font-bold text-xs tracking-tight font-display shadow-xs" aria-hidden="true">
             MC
           </div>
           <div>
@@ -75,23 +73,23 @@ export default function App() {
               <span className="text-sm font-bold text-slate-900 tracking-tight font-display">
                 Metro Connect
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200">
-                Copilot
+              <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#E6F6F5] text-[#007E7A] border border-[#99DEDB]">
+                KMRL Network
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium">Kochi Multimodal Transit Network</p>
+            <p className="text-[10px] text-slate-500 font-medium">Kochi Rail • Water Metro • Feeder</p>
           </div>
         </button>
 
-        {/* Center Navigation Screen Pills */}
-        <div className="hidden sm:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200/60 shadow-2xs">
+        {/* Center Navigation Tabs (Citymapper / Transit Signage Style) */}
+        <div className="hidden sm:flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
           <button
             type="button"
             onClick={() => setScreen('home')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               screen === 'home' || screen === 'itinerary'
-                ? 'bg-white text-teal-800 shadow-xs'
-                : 'text-slate-500 hover:text-slate-900'
+                ? 'bg-white text-[#007E7A] shadow-xs font-bold border border-slate-200/80'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Journey Planner
@@ -100,7 +98,6 @@ export default function App() {
             type="button"
             onClick={() => {
               if (!itinerary) {
-                // Pre-seed a default sample commute if none planned yet
                 handlePlanRoute('Aluva', 'Fort Kochi', { speed: true }).then(() => {
                   setScreen('disruption');
                 });
@@ -108,30 +105,30 @@ export default function App() {
                 setScreen('disruption');
               }
             }}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               screen === 'disruption'
-                ? 'bg-white text-rose-700 shadow-xs'
-                : 'text-slate-500 hover:text-slate-900'
+                ? 'bg-[#DC2626] text-white shadow-xs font-bold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Disruption Simulator
           </button>
         </div>
 
-        {/* Live Engine Status Badge */}
-        <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200/80 px-3 py-1.5 rounded-full backdrop-blur-sm shadow-xs">
+        {/* Engine Status Badge */}
+        <div className="flex items-center gap-2 bg-white border border-slate-200 px-2.5 py-1 rounded-lg text-xs">
           <span
-            className={`w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'}`}
+            className={`w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-500' : 'bg-emerald-600'}`}
             aria-hidden="true"
           />
-          <span className="text-[10px] font-semibold text-slate-600">
-            {useSimulator ? 'Offline Simulator' : 'Live AI Engine'}
+          <span className="text-[11px] font-medium text-slate-600">
+            {useSimulator ? 'Simulator' : 'Live Engine'}
           </span>
         </div>
       </header>
 
       {/* Main Content Viewport */}
-      <main className="flex-grow flex flex-col items-center justify-center relative z-10">
+      <main className="flex-grow flex flex-col items-center justify-start relative z-10">
         {screen === 'home' && (
           <Home
             onPlan={handlePlanRoute}
@@ -163,9 +160,10 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom Footer */}
-      <footer className="py-6 text-center text-[11px] font-medium text-slate-400 bg-white/40 border-t border-slate-200/60 backdrop-blur-xs relative z-10">
-        <p>Kochi Metro Blue Line • Water Metro Routes • Feeder e-Buses</p>
+      {/* Bottom Footer (Clean Official Transit Footer) */}
+      <footer className="py-5 text-center text-[11px] font-medium text-slate-500 bg-white border-t border-slate-200">
+        <p className="font-display font-semibold text-slate-700">Kochi Metro Rail Limited (KMRL) Multimodal Integrated Network</p>
+        <p className="text-slate-400 mt-0.5">Blue Line (25 Stations) • Water Metro (15 Jetties) • KSRTC Feeder e-Buses</p>
       </footer>
     </div>
   );
