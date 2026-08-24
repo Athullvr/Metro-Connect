@@ -35,5 +35,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api/|assets/|favicon\\.svg|icon\\.svg|icons\\.svg|manifest\\.webmanifest|sw\\.js).*)",
+      "destination": "/index.html"
+    }
   ]
 }

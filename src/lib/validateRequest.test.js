@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validatePlanRequest, validateReplanRequest, sanitizeString } from '../../../api/_lib/validateRequest.js';
+import { validatePlanRequest, validateReplanRequest, sanitizeString } from '../../api/_lib/validateRequest.js';
 
 describe('sanitizeString', () => {
   it('trims and caps max length', () => {
