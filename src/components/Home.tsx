@@ -166,98 +166,110 @@ export default function Home({
     setLoading(false);
   };
 
+  const handleSwapStops = () => {
+    const temp = origin;
+    setOrigin(destination);
+    setDestination(temp);
+    setShowOriginDropdown(false);
+    setShowDestDropdown(false);
+  };
+
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 md:py-16 relative">
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 md:py-12 relative">
       
-      {/* Brand Header */}
-      <div className="text-center mb-10 md:mb-12 relative max-w-2xl mx-auto animate-fadeIn">
-        <h1 className="font-serif font-normal text-4xl md:text-5xl text-charcoal tracking-tight leading-tight mb-5">
-          The first agentic AI platform that actually runs your commute.
+      {/* Elevated Hero Brand Header */}
+      <div className="text-center mb-8 md:mb-10 relative max-w-2xl mx-auto animate-fadeIn">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50/80 border border-teal-200/80 text-teal-800 text-xs font-semibold mb-4 backdrop-blur-sm shadow-xs">
+          <span className="w-1.5 h-1.5 rounded-full bg-teal-600 animate-ping" />
+          Kochi Metro • Water Metro • Feeder e-Buses
+        </div>
+        <h1 className="font-display font-extrabold text-3xl md:text-5xl text-slate-900 tracking-tight leading-tight mb-3">
+          Smarter transit across <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600">Kochi's waters & rails</span>.
         </h1>
-        <p className="text-gray-500 text-xs md:text-sm max-w-lg mx-auto font-sans leading-relaxed">
-          Metro Connect Copilot plugs into Kochi Metro, Water Metro, and e-buses to plan legs, explain transit choices, and adapt dynamically during weather or route disruptions.
+        <p className="text-slate-500 text-xs md:text-sm max-w-lg mx-auto font-sans leading-relaxed">
+          Real-time multimodal graph routing across all 25 Blue Line stations, 6 operational Water Metro routes, and feeder bus links.
         </p>
       </div>
 
-      {/* Main Clean Card Form */}
-      <div className="clean-card rounded-3xl p-6 md:p-8 relative z-30">
+      {/* Main Glassmorphic Planner Card */}
+      <div className="glass-card rounded-3xl p-6 md:p-8 relative z-30">
         
         {/* Settings Toggle */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-500 transition-all border border-gray-200 cursor-pointer"
+            className="p-2 rounded-xl bg-slate-100/70 hover:bg-slate-200/70 text-slate-500 transition-all border border-slate-200/60 cursor-pointer"
             title="Configure AI Agent API Settings"
             aria-label="Configure AI Agent API Settings"
             aria-expanded={showSettings}
           >
-            <Settings size={16} />
+            <Settings size={15} />
           </button>
         </div>
 
-        {/* Engine Settings */}
+        {/* Engine Settings Drawer */}
         {showSettings && (
-          <div className="mb-6 p-4 rounded-2xl bg-gray-50 border border-gray-200 animate-fadeIn">
-            <h3 className="text-xs font-bold text-charcoal mb-3 flex items-center gap-2">
-              <Settings size={14} className="text-metro-text" /> Copilot Agent Configuration
+          <div className="mb-6 p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 animate-fadeIn">
+            <h3 className="text-xs font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <Settings size={14} className="text-teal-600" /> Copilot Engine Settings
             </h3>
 
             <div>
-              <label className="block text-[10px] text-gray-500 mb-1 font-semibold uppercase">Copilot Engine Mode</label>
-              <div className="flex bg-gray-200/50 p-1 rounded-xl border border-gray-200">
+              <label className="block text-[10px] text-slate-500 mb-1.5 font-semibold uppercase tracking-wider">Engine Routing Mode</label>
+              <div className="flex bg-slate-200/60 p-1 rounded-xl border border-slate-200">
                 <button
                   type="button"
                   onClick={() => setUseSimulator(true)}
                   aria-pressed={useSimulator}
-                  className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
                     useSimulator
-                      ? 'bg-white text-charcoal shadow-sm'
-                      : 'text-gray-500 hover:text-gray-800'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
-                  <WifiOff size={11} /> Local Simulator
+                  <WifiOff size={12} /> Local Simulator (Offline)
                 </button>
                 <button
                   type="button"
                   onClick={() => setUseSimulator(false)}
                   aria-pressed={!useSimulator}
-                  className={`flex-1 py-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1.5 ${
                     !useSimulator
-                      ? 'bg-white text-charcoal shadow-sm'
-                      : 'text-gray-500 hover:text-gray-800'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
-                  <Wifi size={11} /> Live Copilot
+                  <Wifi size={12} /> Live AI Copilot (OpenAI Proxy)
                 </button>
               </div>
-              <p className="text-[10px] text-gray-400 mt-2">
-                Live Copilot calls our server-side planning agent — no API key needed on your end.
+              <p className="text-[10px] text-slate-400 mt-2">
+                Live mode proxies requests server-side via `/api/plan` with automated simulator fallbacks.
               </p>
             </div>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Inputs Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+          {/* Inputs Row with Centered Swap Button */}
+          <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-3 items-end relative">
             
             {/* Origin Autocomplete Input */}
             <div ref={originRef} className="relative">
               <div className="flex items-center justify-between mb-1.5">
-                <label htmlFor="origin-input" className="block text-[10px] text-metro-text font-bold tracking-wider uppercase">Starting Station</label>
+                <label htmlFor="origin-input" className="block text-[10px] text-teal-700 font-bold tracking-wider uppercase">Starting Station</label>
                 <button
                   type="button"
                   onClick={handleUseMyLocation}
                   disabled={locating}
-                  className="flex items-center gap-1 text-[9px] font-bold text-metro-text hover:text-charcoal transition-all cursor-pointer disabled:opacity-50"
+                  className="flex items-center gap-1 text-[9px] font-bold text-teal-600 hover:text-teal-800 transition-all cursor-pointer disabled:opacity-50"
                   title="Detect the nearest station from your current location"
                 >
-                  <LocateFixed size={11} className={locating ? 'animate-pulse' : ''} />
-                  {locating ? 'Locating...' : 'Use my location'}
+                  <LocateFixed size={11} className={locating ? 'animate-spin' : ''} />
+                  {locating ? 'Locating...' : 'Use my GPS location'}
                 </button>
               </div>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-metro-text" size={16} aria-hidden="true" />
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-600" size={16} aria-hidden="true" />
                 <input
                   id="origin-input"
                   type="text"
@@ -267,7 +279,7 @@ export default function Home({
                   aria-haspopup="listbox"
                   aria-controls="origin-listbox"
                   aria-autocomplete="list"
-                  placeholder="Type start station or click suggestions..."
+                  placeholder="Type start station, jetty or landmark..."
                   value={origin}
                   onChange={(e) => {
                     setOrigin(e.target.value);
@@ -278,16 +290,16 @@ export default function Home({
                     setShowDestDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowOriginDropdown(false))}
-                  className="w-full bg-white border border-gray-200 focus:border-metro-border rounded-xl pl-11 pr-4 py-3.5 text-charcoal text-xs focus:outline-none transition-all"
+                  className="w-full bg-white/90 border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 rounded-xl pl-10 pr-4 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
                 />
               </div>
               {locationError && (
-                <p role="alert" className="text-[10px] text-red-500 mt-1">{locationError}</p>
+                <p role="alert" className="text-[10px] text-rose-500 mt-1 font-medium">{locationError}</p>
               )}
 
               {/* Suggestions Dropdown overlay */}
               {showOriginDropdown && originSuggestions.length > 0 && (
-                <div id="origin-listbox" role="listbox" aria-label="Starting station suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
+                <div id="origin-listbox" role="listbox" aria-label="Starting station suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200 rounded-xl shadow-xl mt-1.5 max-h-56 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100">
                   {originSuggestions.map((s, idx) => (
                     <button
                       key={idx}
@@ -299,10 +311,16 @@ export default function Home({
                         setShowOriginDropdown(false);
                       }}
                       onKeyDown={(e) => e.key === 'Escape' && setShowOriginDropdown(false)}
-                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 focus:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-xs text-slate-800 hover:bg-teal-50/50 focus:bg-teal-50 flex items-center justify-between transition-colors cursor-pointer"
                     >
-                      <span className="font-medium">{s.name}</span>
-                      <span className="text-[9px] font-bold text-gray-400 uppercase bg-gray-100 px-1.5 py-0.5 rounded">
+                      <span className="font-semibold text-slate-800">{s.name}</span>
+                      <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                        s.type.includes('Metro Station') 
+                          ? 'bg-teal-50 text-teal-700 border border-teal-200' 
+                          : s.type.includes('Water') 
+                            ? 'bg-sky-50 text-sky-700 border border-sky-200' 
+                            : 'bg-amber-50 text-amber-700 border border-amber-200'
+                      }`}>
                         {s.type.replace('Kochi ', '')}
                       </span>
                     </button>
@@ -311,11 +329,24 @@ export default function Home({
               )}
             </div>
 
+            {/* Swap Button */}
+            <div className="flex justify-center pb-1">
+              <button
+                type="button"
+                onClick={handleSwapStops}
+                title="Swap origin and destination"
+                aria-label="Swap origin and destination"
+                className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-teal-50 text-slate-600 hover:text-teal-700 border border-slate-200 flex items-center justify-center transition-all cursor-pointer shadow-xs hover:scale-105 active:scale-95"
+              >
+                ⇄
+              </button>
+            </div>
+
             {/* Destination Autocomplete Input */}
             <div ref={destRef} className="relative">
-              <label htmlFor="destination-input" className="block text-[10px] text-water-text font-bold tracking-wider uppercase mb-1.5">Destination</label>
+              <label htmlFor="destination-input" className="block text-[10px] text-sky-700 font-bold tracking-wider uppercase mb-1.5">Destination</label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-water-text" size={16} aria-hidden="true" />
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-600" size={16} aria-hidden="true" />
                 <input
                   id="destination-input"
                   type="text"
@@ -325,7 +356,7 @@ export default function Home({
                   aria-haspopup="listbox"
                   aria-controls="destination-listbox"
                   aria-autocomplete="list"
-                  placeholder="Type destination jetty or station..."
+                  placeholder="Type destination jetty, stop or station..."
                   value={destination}
                   onChange={(e) => {
                     setDestination(e.target.value);
@@ -336,13 +367,13 @@ export default function Home({
                     setShowOriginDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowDestDropdown(false))}
-                  className="w-full bg-white border border-gray-200 focus:border-water-border rounded-xl pl-11 pr-4 py-3.5 text-charcoal text-xs focus:outline-none transition-all"
+                  className="w-full bg-white/90 border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl pl-10 pr-4 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
                 />
               </div>
 
               {/* Suggestions Dropdown overlay */}
               {showDestDropdown && destSuggestions.length > 0 && (
-                <div id="destination-listbox" role="listbox" aria-label="Destination suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-56 overflow-y-auto scrollbar-thin z-50">
+                <div id="destination-listbox" role="listbox" aria-label="Destination suggestions" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200 rounded-xl shadow-xl mt-1.5 max-h-56 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100">
                   {destSuggestions.map((s, idx) => (
                     <button
                       key={idx}
@@ -354,10 +385,16 @@ export default function Home({
                         setShowDestDropdown(false);
                       }}
                       onKeyDown={(e) => e.key === 'Escape' && setShowDestDropdown(false)}
-                      className="w-full text-left px-4 py-2 text-xs text-charcoal hover:bg-gray-50 focus:bg-gray-50 flex items-center justify-between border-b border-gray-100 last:border-0 cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-xs text-slate-800 hover:bg-sky-50/50 focus:bg-sky-50 flex items-center justify-between transition-colors cursor-pointer"
                     >
-                      <span className="font-medium">{s.name}</span>
-                      <span className="text-[9px] font-bold text-gray-400 uppercase bg-gray-100 px-1.5 py-0.5 rounded">
+                      <span className="font-semibold text-slate-800">{s.name}</span>
+                      <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                        s.type.includes('Metro Station') 
+                          ? 'bg-teal-50 text-teal-700 border border-teal-200' 
+                          : s.type.includes('Water') 
+                            ? 'bg-sky-50 text-sky-700 border border-sky-200' 
+                            : 'bg-amber-50 text-amber-700 border border-amber-200'
+                      }`}>
                         {s.type.replace('Kochi ', '')}
                       </span>
                     </button>
@@ -370,65 +407,65 @@ export default function Home({
 
           {/* Constraints Selector */}
           <div>
-            <label className="block text-[10px] text-gray-500 font-bold tracking-wider uppercase mb-2">Trip Constraints</label>
+            <label className="block text-[10px] text-slate-500 font-bold tracking-wider uppercase mb-2">Trip Preferences</label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
               <button
                 type="button"
                 onClick={() => toggleConstraint('speed')}
                 aria-pressed={constraints.speed}
-                className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                   constraints.speed
-                    ? 'bg-metro-bg border-metro-border text-metro-text font-bold'
-                    : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'bg-teal-500 text-white border-teal-600 shadow-sm shadow-teal-500/20'
+                    : 'bg-white/80 border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <Activity size={13} /> Speed
+                <Activity size={13} /> Fastest Route
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('luggage')}
                 aria-pressed={constraints.luggage}
-                className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                   constraints.luggage
-                    ? 'bg-water-bg border-water-border text-water-text font-bold'
-                    : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'bg-sky-500 text-white border-sky-600 shadow-sm shadow-sky-500/20'
+                    : 'bg-white/80 border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <Briefcase size={13} /> Luggage
+                <Briefcase size={13} /> Luggage Friendly
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('scenic')}
                 aria-pressed={constraints.scenic}
-                className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                   constraints.scenic
-                    ? 'bg-feeder-bg border-feeder-border text-feeder-text font-bold'
-                    : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'bg-amber-500 text-white border-amber-600 shadow-sm shadow-amber-500/20'
+                    : 'bg-white/80 border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <Compass size={13} /> Scenic
+                <Compass size={13} /> Scenic / Water
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('lowCost')}
                 aria-pressed={constraints.lowCost}
-                className={`flex items-center justify-center gap-1.5 p-2.5 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                   constraints.lowCost
-                    ? 'bg-fare-bg border-fare-border text-fare-text font-bold'
-                    : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                    ? 'bg-indigo-500 text-white border-indigo-600 shadow-sm shadow-indigo-500/20'
+                    : 'bg-white/80 border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                <TrendingDown size={13} /> Cost
+                <TrendingDown size={13} /> Lowest Fare
               </button>
             </div>
           </div>
 
           {/* Plan error banner */}
           {planError && (
-            <div role="alert" className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+            <div role="alert" className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700">
               <p className="font-semibold">{planError.message}</p>
               {planError.suggestions?.length > 0 && (
-                <p className="mt-1 text-red-600">
+                <p className="mt-1 text-rose-600">
                   Did you mean: {planError.suggestions.join(', ')}?
                 </p>
               )}
@@ -440,30 +477,30 @@ export default function Home({
             type="submit"
             disabled={loading}
             aria-busy={loading}
-            className="w-full py-4 bg-charcoal hover:bg-black text-white font-semibold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-black/5 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
+            className="w-full py-4 bg-gradient-to-r from-teal-700 via-teal-800 to-slate-900 hover:from-teal-800 hover:to-black text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-teal-900/15 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-50"
           >
             {loading ? (
               <span role="status" aria-live="polite" className="flex items-center gap-2 text-xs">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
                 Coordinating transit commute...
               </span>
             ) : (
-              <span className="text-xs font-semibold tracking-wider uppercase flex items-center gap-2">
-                Plan Commute Route <Search size={14} />
+              <span className="text-xs font-bold tracking-wider uppercase flex items-center gap-2 font-display">
+                Plan Multimodal Journey <Search size={14} />
               </span>
             )}
           </button>
         </form>
 
         {/* Shortcuts tag badges */}
-        <div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold text-gray-400 uppercase mr-1">Quick Demos:</span>
+        <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-bold text-slate-400 uppercase mr-1">Popular Journeys:</span>
           {SUGGESTIONS.map((s, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => handleSuggestClick(s)}
-              className="text-xs bg-gray-50 hover:bg-gray-100 border border-gray-200/80 text-charcoal-light px-3 py-1.5 rounded-full transition-all cursor-pointer"
+              className="text-xs bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-800 px-3 py-1.5 rounded-full transition-all cursor-pointer font-medium"
             >
               {s.label}
             </button>
@@ -472,15 +509,15 @@ export default function Home({
 
         {/* Recent Trips */}
         {recentTrips.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-slate-100">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold text-gray-400 uppercase">Recent Trips:</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Recent Journeys:</span>
               <button
                 type="button"
                 onClick={handleClearHistory}
-                className="text-[10px] font-semibold text-gray-400 hover:text-red-500 transition-all cursor-pointer"
+                className="text-[10px] font-semibold text-slate-400 hover:text-rose-500 transition-all cursor-pointer"
               >
-                Clear
+                Clear History
               </button>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -489,7 +526,7 @@ export default function Home({
                   key={trip.id}
                   type="button"
                   onClick={() => handleSuggestClick({ origin: trip.origin, destination: trip.destination })}
-                  className="text-xs bg-gray-50 hover:bg-gray-100 border border-gray-200/80 text-charcoal-light px-3 py-1.5 rounded-full transition-all cursor-pointer"
+                  className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-3 py-1.5 rounded-full transition-all cursor-pointer font-medium"
                 >
                   {trip.origin} ➔ {trip.destination}
                 </button>

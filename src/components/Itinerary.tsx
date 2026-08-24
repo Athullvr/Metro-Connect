@@ -5,37 +5,41 @@ import {
   Bus, 
   Footprints, 
   Clock, 
-  Coins, 
   ArrowLeft, 
   AlertTriangle, 
-  ChevronRight,
-  Info
+  ArrowRight,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 
 const MODE_CONFIG = {
   metro: {
-    color: 'bg-metro-bg border-metro-border text-metro-text',
+    badge: 'bg-teal-50 text-teal-800 border-teal-200',
+    iconBg: 'bg-gradient-to-br from-teal-500 to-teal-700 text-white shadow-teal-500/25',
+    lineColor: 'border-teal-500',
     icon: Train,
-    label: 'Kochi Metro (Blue Line)',
-    stripe: 'bg-metro-border'
+    label: 'Kochi Metro Blue Line'
   },
   water_metro: {
-    color: 'bg-water-bg border-water-border text-water-text',
+    badge: 'bg-sky-50 text-sky-800 border-sky-200',
+    iconBg: 'bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-sky-500/25',
+    lineColor: 'border-sky-500',
     icon: Ship,
-    label: 'Kochi Water Metro',
-    stripe: 'bg-water-border'
+    label: 'Kochi Water Metro'
   },
   feeder_bus: {
-    color: 'bg-feeder-bg border-feeder-border text-feeder-text',
+    badge: 'bg-amber-50 text-amber-800 border-amber-200',
+    iconBg: 'bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-amber-500/25',
+    lineColor: 'border-amber-500',
     icon: Bus,
-    label: 'MetroConnect Feeder e-Bus',
-    stripe: 'bg-feeder-border'
+    label: 'Metro Feeder e-Bus'
   },
   walk: {
-    color: 'bg-gray-100 border-gray-300 text-gray-500',
+    badge: 'bg-slate-100 text-slate-700 border-slate-200',
+    iconBg: 'bg-slate-200 text-slate-700',
+    lineColor: 'border-slate-300',
     icon: Footprints,
-    label: 'Walk Connection',
-    stripe: 'bg-gray-300'
+    label: 'Walk Connection'
   }
 };
 
@@ -47,41 +51,51 @@ export default function Itinerary({
   if (!itinerary) return null;
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-8 animate-fadeIn">
-      {/* Back Button */}
+    <div className="w-full max-w-3xl mx-auto px-4 py-8 md:py-10 animate-fadeIn relative z-10">
+      {/* Back Navigation */}
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-gray-600 hover:text-charcoal transition-all text-xs font-semibold mb-6 bg-white border border-gray-200 hover:bg-gray-50 px-4 py-2 rounded-xl cursor-pointer"
+        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold mb-6 bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
       >
         <ArrowLeft size={14} /> Back to Search
       </button>
 
-      {/* Header Commute summary */}
-      <div className="clean-card rounded-3xl p-6 mb-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* Digital Transit Boarding Pass Header */}
+      <div className="glass-card rounded-3xl p-6 md:p-8 mb-8 border border-white/80 relative overflow-hidden">
+        {/* Decorative Top Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-amber-500" />
+
+        <div className="flex flex-wrap items-center justify-between gap-6">
           <div>
-            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Transit Copilot Commute Route</div>
-            <h2 className="text-xl md:text-2xl font-normal text-charcoal flex items-center gap-2 font-serif">
-              {itinerary.legs[0]?.from} 
-              <ChevronRight size={18} className="text-gray-400" /> 
-              {itinerary.legs[itinerary.legs.length - 1]?.to}
+            <div className="text-[10px] font-bold text-teal-700 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-teal-500" /> Recommended Transit Route
+            </div>
+            <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 flex items-center gap-2.5 font-display tracking-tight">
+              <span>{itinerary.legs[0]?.from}</span>
+              <ArrowRight size={18} className="text-slate-400 shrink-0" /> 
+              <span>{itinerary.legs[itinerary.legs.length - 1]?.to}</span>
             </h2>
           </div>
           
-          {/* Quick Metrics */}
+          {/* Quick Stat Badges */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 px-4 py-2.5 rounded-2xl">
-              <Clock size={16} className="text-water-text" />
+            <div className="flex items-center gap-2.5 bg-slate-50/90 border border-slate-200/80 px-4 py-2.5 rounded-2xl shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                <Clock size={16} />
+              </div>
               <div>
-                <div className="text-[9px] text-gray-500 uppercase font-medium">Duration</div>
-                <div className="text-sm font-bold text-charcoal">{itinerary.total_duration} mins</div>
+                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Duration</div>
+                <div className="text-sm font-extrabold text-slate-900 font-display">{itinerary.total_duration} mins</div>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 px-4 py-2.5 rounded-2xl">
-              <Coins size={16} className="text-fare-text" />
+
+            <div className="flex items-center gap-2.5 bg-slate-50/90 border border-slate-200/80 px-4 py-2.5 rounded-2xl shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs">
+                ₹
+              </div>
               <div>
-                <div className="text-[9px] text-gray-500 uppercase font-medium">Est. Fare</div>
-                <div className="text-sm font-bold text-charcoal">₹{itinerary.total_cost}</div>
+                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Est. Fare</div>
+                <div className="text-sm font-extrabold text-slate-900 font-display">₹{itinerary.total_cost}</div>
               </div>
             </div>
           </div>
@@ -89,7 +103,7 @@ export default function Itinerary({
       </div>
 
       {/* Connected Visual Timeline */}
-      <div className="relative pl-8 md:pl-10 border-l border-gray-300 ml-6 md:ml-8 space-y-6 py-2">
+      <div className="relative pl-8 md:pl-10 border-l-2 border-slate-200 ml-6 md:ml-8 space-y-6 py-2">
         {itinerary.legs.map((leg, idx) => {
           const config = MODE_CONFIG[leg.mode] || MODE_CONFIG.walk;
           const Icon = config.icon;
@@ -98,71 +112,64 @@ export default function Itinerary({
             <div 
               key={idx}
               className="relative animate-fadeIn"
-              style={{ animationDelay: `${idx * 150}ms` }}
+              style={{ animationDelay: `${idx * 100}ms` }}
             >
-              {/* Circular Mode Icon centered exactly on the timeline border-l line */}
-              <div className={`absolute -left-[57px] md:-left-[61px] top-2 w-10 h-10 rounded-full border-2 bg-white flex items-center justify-center shadow-sm z-20 ${config.color}`}>
-                <Icon size={16} />
+              {/* Circular Mode Icon centered exactly on the timeline border */}
+              <div className={`absolute -left-[57px] md:-left-[61px] top-3 w-10 h-10 rounded-2xl flex items-center justify-center shadow-md z-20 ${config.iconBg}`}>
+                <Icon size={18} />
               </div>
 
               {/* Connected Leg Detail Card */}
-              <div className="clean-card rounded-2xl p-5 relative transition-all hover:border-gray-300">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400">
+              <div className="glass-card rounded-2xl p-5 relative transition-all border border-slate-200/80 hover:border-slate-300">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${config.badge}`}>
                     {config.label}
                   </span>
-                  <div className="flex items-center gap-2 text-[10px] text-charcoal font-semibold bg-gray-50 border border-gray-100 px-2 py-0.5 rounded">
-                    <span className="flex items-center gap-1"><Clock size={10} /> {leg.duration} min</span>
-                    {leg.cost > 0 && <span>₹{leg.cost}</span>}
+                  <div className="flex items-center gap-2 text-xs text-slate-700 font-bold bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
+                    <span className="flex items-center gap-1"><Clock size={11} className="text-slate-400" /> {leg.duration} min</span>
+                    {leg.cost > 0 && <span className="text-teal-700 font-extrabold">₹{leg.cost}</span>}
                   </div>
                 </div>
                 
-                <h3 className="text-sm font-bold text-charcoal mb-1">
-                  {leg.from} ➔ {leg.to}
+                <h3 className="text-sm font-bold text-slate-900 mb-1.5 flex items-center gap-2 font-display">
+                  <span>{leg.from}</span>
+                  <span className="text-slate-300">➔</span>
+                  <span>{leg.to}</span>
                 </h3>
 
-                <p className="text-xs text-gray-600 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   {leg.details}
                 </p>
               </div>
-
-              {/* Connecting Transfer Indicator Line (between legs) */}
-              {idx < itinerary.legs.length - 1 && (
-                <div className="absolute left-[-57px] md:left-[-61px] bottom-[-24px] h-6 flex items-center pointer-events-none select-none z-10">
-                  <div className="w-10 text-center text-[9px] font-bold text-gray-400 bg-gray-50 px-1 rounded border border-gray-200">
-                    ➔
-                  </div>
-                </div>
-              )}
             </div>
           );
         })}
       </div>
 
-      {/* Reasoning Panel */}
-      <div className="clean-card rounded-2xl p-5 mt-8 mb-6 bg-gradient-to-br from-gray-50/50 to-white">
-        <h4 className="text-[10px] font-bold text-charcoal uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <Info size={14} className="text-metro-text" /> Transit Copilot Reasoning
+      {/* AI Reasoning Panel */}
+      <div className="glass-card rounded-2xl p-5 md:p-6 mt-8 mb-6 border border-teal-100 bg-gradient-to-br from-teal-50/40 via-white to-sky-50/30">
+        <h4 className="text-[10px] font-bold text-teal-800 uppercase tracking-widest mb-2 flex items-center gap-2">
+          <Sparkles size={14} className="text-teal-600" /> Copilot Routing Logic
         </h4>
-        <p className="text-xs text-gray-700 leading-relaxed font-sans italic">
+        <p className="text-xs text-slate-700 leading-relaxed font-sans italic">
           "{itinerary.explanation}"
         </p>
       </div>
 
-      {/* Reroute Resiliency Trigger Card */}
-      <div className="border-2 border-dashed border-red-200 bg-red-50/30 rounded-3xl p-6 text-center">
-        <div className="w-12 h-12 rounded-full bg-red-100 border border-red-200 text-red-700 flex items-center justify-center mx-auto mb-3 animate-pulse">
+      {/* Disruption Simulator Trigger Banner */}
+      <div className="rounded-3xl p-6 md:p-7 border border-rose-200 bg-gradient-to-br from-rose-50/60 via-white to-amber-50/40 text-center shadow-xs">
+        <div className="w-11 h-11 rounded-2xl bg-rose-100/80 text-rose-700 flex items-center justify-center mx-auto mb-3 border border-rose-200">
           <AlertTriangle size={20} />
         </div>
-        <h3 className="text-sm font-bold text-charcoal mb-1">CommCommute Resiliency Check</h3>
-        <p className="text-xs text-gray-500 max-w-md mx-auto mb-4">
-          Simulate a weather or backwater flow failure to check how the AI adapter agent handles routing delays.
+        <h3 className="text-sm font-bold text-slate-900 mb-1 font-display">Commute Disruption Simulator</h3>
+        <p className="text-xs text-slate-500 max-w-md mx-auto mb-5 leading-relaxed">
+          Simulate a real Kochi monsoon storm, jetty shutdown, or metro delay to test dynamic AI rerouting.
         </p>
         <button
           onClick={onTriggerDisruptionSim}
-          className="px-6 py-2.5 bg-charcoal hover:bg-black text-white font-semibold text-xs rounded-xl shadow-md cursor-pointer active:scale-95 transition-all inline-flex items-center gap-1.5"
+          className="px-6 py-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs rounded-xl shadow-md shadow-rose-600/20 cursor-pointer active:scale-95 transition-all inline-flex items-center gap-2"
         >
-          Simulate CommCommute Disruption
+          <Zap size={14} /> Open Disruption Simulator
         </button>
       </div>
     </div>

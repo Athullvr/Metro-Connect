@@ -48,38 +48,49 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-cream-bg text-gray-700 flex flex-col font-sans select-none relative">
-      {/* Top Navbar */}
-      <header className="glass bg-white/70 sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-[#eef0e5]">
+    <div className="min-h-screen bg-canvas text-slate-800 flex flex-col font-sans select-none relative">
+      {/* Atmospheric Ambient Glow Layer */}
+      <div className="ambient-bg" aria-hidden="true" />
+
+      {/* Top Navbar with Frosted Glass */}
+      <header className="glass-header sticky top-0 z-50 px-5 md:px-8 py-3.5 flex items-center justify-between">
         <button
           type="button"
-          className="flex items-center gap-3 cursor-pointer text-left"
+          className="flex items-center gap-3 cursor-pointer text-left group transition-all"
           onClick={() => setScreen('home')}
           aria-label="Go to home screen"
         >
-          <div className="w-8 h-8 rounded-xl bg-charcoal flex items-center justify-center text-white font-serif font-semibold text-sm" aria-hidden="true">
-            N
+          {/* Kochi Transit Compass Logo */}
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 via-teal-700 to-sky-700 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform" aria-hidden="true">
+            MC
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-charcoal tracking-tight flex items-center gap-1.5 font-sans m-0">
-              Metro Connect <span className="text-water-text font-bold">Copilot</span>
-              {/* Active Engine Status Indicator Dot */}
-              <span
-                className={`inline-block w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-400' : 'bg-emerald-500'} animate-pulse`}
-                title={useSimulator ? 'Engine: Offline Simulator' : 'Engine: OpenAI Live'}
-                role="status"
-                aria-label={useSimulator ? 'Engine: Offline Simulator' : 'Engine: OpenAI Live'}
-              ></span>
-            </h1>
-            <p className="text-[10px] text-gray-500">multimodal transit reasoning layer</p>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-slate-900 tracking-tight font-display">
+                Metro Connect
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+                Copilot
+              </span>
+            </div>
+            <p className="text-[10px] text-slate-500 font-medium">Kochi Multimodal Transit Network</p>
           </div>
         </button>
 
-
+        {/* Live Engine Status Badge */}
+        <div className="flex items-center gap-2 bg-slate-50/80 border border-slate-200/80 px-3 py-1.5 rounded-full backdrop-blur-sm shadow-xs">
+          <span
+            className={`w-2 h-2 rounded-full ${useSimulator ? 'bg-amber-500' : 'bg-emerald-500 animate-pulse'}`}
+            aria-hidden="true"
+          />
+          <span className="text-[10px] font-semibold text-slate-600">
+            {useSimulator ? 'Offline Simulator' : 'Live AI Engine'}
+          </span>
+        </div>
       </header>
 
       {/* Main Content Viewport */}
-      <main className="flex-grow flex flex-col items-center justify-center">
+      <main className="flex-grow flex flex-col items-center justify-center relative z-10">
         {screen === 'home' && (
           <Home
             onPlan={handlePlanRoute}
@@ -110,9 +121,9 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom Footer - Simplified & Elegant */}
-      <footer className="py-8 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white/40 border-t border-[#eef0e5]/50">
-        <p>Metro Connect Copilot</p>
+      {/* Bottom Footer */}
+      <footer className="py-6 text-center text-[11px] font-medium text-slate-400 bg-white/40 border-t border-slate-200/60 backdrop-blur-xs relative z-10">
+        <p>Kochi Metro Blue Line • Water Metro Routes • Feeder e-Buses</p>
       </footer>
     </div>
   );
