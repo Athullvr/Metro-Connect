@@ -566,6 +566,113 @@ export default function Home({
         )}
 
       </div>
+
+      {/* Kochi Integrated Transit Network Visual Showcase */}
+      <div className="mt-12 animate-fadeIn">
+        <div className="flex items-center justify-between mb-5 px-1">
+          <div>
+            <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">
+              Integrated Kochi Transit Network
+            </h3>
+            <p className="text-xs text-slate-500">
+              Three seamless mobility modes coordinated by our AI engine.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Card 1: Metro Rail */}
+          <div 
+            onClick={() => handleSuggestClick({ origin: 'Aluva', destination: 'Maharajas College' })}
+            className="glass-card rounded-2xl overflow-hidden border border-teal-200/80 hover:border-teal-400 hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col"
+          >
+            <div className="relative h-40 overflow-hidden bg-slate-100">
+              <img 
+                src="/images/kochi-metro.jpg" 
+                alt="Kochi Metro Blue Line" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-teal-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs flex items-center gap-1">
+                <Train size={11} /> 25 Stations
+              </span>
+              <span className="absolute bottom-3 left-3 text-white text-xs font-bold font-display">
+                Kochi Metro Blue Line
+              </span>
+            </div>
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+                Elevated rapid rail linking Aluva to Tripunithura. Fast, air-conditioned arterial spine.
+              </p>
+              <div className="flex items-center justify-between text-[10px] font-bold text-teal-700 pt-2 border-t border-slate-100 group-hover:translate-x-0.5 transition-transform">
+                <span>Try Aluva ➔ Maharajas</span>
+                <ArrowRight size={12} />
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2: Water Metro */}
+          <div 
+            onClick={() => handleSuggestClick({ origin: 'High Court Jetty', destination: 'Fort Kochi Jetty' })}
+            className="glass-card rounded-2xl overflow-hidden border border-sky-200/80 hover:border-sky-400 hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col"
+          >
+            <div className="relative h-40 overflow-hidden bg-slate-100">
+              <img 
+                src="/images/kochi-water-metro.jpg" 
+                alt="Kochi Water Metro Catamaran" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-sky-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs flex items-center gap-1">
+                <Ship size={11} /> 15 Jetties
+              </span>
+              <span className="absolute bottom-3 left-3 text-white text-xs font-bold font-display">
+                Kochi Water Metro
+              </span>
+            </div>
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+                Battery-electric catamarans bypassing city traffic across Vembanad backwaters.
+              </p>
+              <div className="flex items-center justify-between text-[10px] font-bold text-sky-700 pt-2 border-t border-slate-100 group-hover:translate-x-0.5 transition-transform">
+                <span>Try High Court ➔ Fort Kochi</span>
+                <ArrowRight size={12} />
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Feeder Buses */}
+          <div 
+            onClick={() => handleSuggestClick({ origin: 'Kalamassery', destination: 'Infopark' })}
+            className="glass-card rounded-2xl overflow-hidden border border-amber-200/80 hover:border-amber-400 hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col"
+          >
+            <div className="relative h-40 overflow-hidden bg-slate-100">
+              <img 
+                src="/images/kochi-feeder-bus.jpg" 
+                alt="Metro Feeder e-Bus" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-amber-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs flex items-center gap-1">
+                <Bus size={11} /> 18 Feeder Links
+              </span>
+              <span className="absolute bottom-3 left-3 text-white text-xs font-bold font-display">
+                Metro Feeder e-Buses
+              </span>
+            </div>
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
+                First and last-mile electric feeder connections to IT hubs, hospitals, and campuses.
+              </p>
+              <div className="flex items-center justify-between text-[10px] font-bold text-amber-700 pt-2 border-t border-slate-100 group-hover:translate-x-0.5 transition-transform">
+                <span>Try Kalamassery ➔ Infopark</span>
+                <ArrowRight size={12} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

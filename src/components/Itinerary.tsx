@@ -21,6 +21,7 @@ const MODE_CONFIG = {
     iconBg: 'bg-gradient-to-br from-teal-500 to-teal-700 text-white shadow-teal-500/25',
     lineColor: 'border-teal-500',
     icon: Train,
+    image: '/images/kochi-metro.jpg',
     label: 'Kochi Metro Blue Line'
   },
   water_metro: {
@@ -28,6 +29,7 @@ const MODE_CONFIG = {
     iconBg: 'bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-sky-500/25',
     lineColor: 'border-sky-500',
     icon: Ship,
+    image: '/images/kochi-water-metro.jpg',
     label: 'Kochi Water Metro'
   },
   feeder_bus: {
@@ -35,6 +37,7 @@ const MODE_CONFIG = {
     iconBg: 'bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-amber-500/25',
     lineColor: 'border-amber-500',
     icon: Bus,
+    image: '/images/kochi-feeder-bus.jpg',
     label: 'Metro Feeder e-Bus'
   },
   walk: {
@@ -42,6 +45,7 @@ const MODE_CONFIG = {
     iconBg: 'bg-slate-200 text-slate-700',
     lineColor: 'border-slate-300',
     icon: Footprints,
+    image: null,
     label: 'Walk Connection'
   }
 };
@@ -207,15 +211,28 @@ Reasoning: ${itinerary.explanation}`;
                   </div>
                 </div>
                 
-                <h3 className="text-sm font-bold text-slate-900 mb-1.5 flex items-center gap-2 font-display">
-                  <span>{leg.from}</span>
-                  <span className="text-slate-300">➔</span>
-                  <span>{leg.to}</span>
-                </h3>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-sm font-bold text-slate-900 mb-1 flex items-center gap-2 font-display">
+                      <span>{leg.from}</span>
+                      <span className="text-slate-300">➔</span>
+                      <span>{leg.to}</span>
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {leg.details}
+                    </p>
+                  </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {leg.details}
-                </p>
+                  {config.image && (
+                    <div className="w-16 h-12 rounded-xl overflow-hidden shrink-0 border border-slate-200 shadow-2xs hidden sm:block">
+                      <img 
+                        src={config.image} 
+                        alt={config.label} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );
