@@ -78,129 +78,140 @@ export default function DisruptionSimulator({
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8 animate-fadeIn">
-      {/* Back Button */}
+    <div className="w-full max-w-5xl mx-auto px-4 py-8 md:py-10 animate-fadeIn relative z-10">
+      {/* Back Navigation */}
       <button 
         onClick={onBack}
-        className="flex items-center gap-2 text-gray-600 hover:text-charcoal transition-all text-xs font-semibold mb-6 bg-white border border-gray-200 hover:bg-gray-50 px-4 py-2 rounded-xl cursor-pointer"
+        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold mb-6 bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
       >
         <ArrowLeft size={14} /> Back to Itinerary
       </button>
 
       {/* Disruption Settings Card */}
-      <div className="clean-card rounded-3xl p-6 mb-8 border border-red-200 bg-red-50/10">
-        <h2 className="text-xl md:text-2xl font-normal text-charcoal mb-2 flex items-center gap-2 font-serif">
-          <AlertTriangle className="text-red-600" /> Disruption Control Center
-        </h2>
-        <p className="text-xs text-gray-500 mb-6">
-          Trigger a Kochi transit event below. The Adapter Agent will instantly reroute you starting from your current position.
-        </p>
+      <div className="glass-card rounded-3xl p-6 md:p-8 mb-8 border border-rose-200/80 bg-gradient-to-br from-rose-50/30 via-white to-amber-50/20">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center border border-rose-200">
+            <AlertTriangle size={18} />
+          </div>
+          <div>
+            <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 font-display tracking-tight">
+              Transit Disruption Control Center
+            </h2>
+            <p className="text-xs text-slate-500 font-medium">
+              Simulate live weather or channel closures in Kochi to trigger instant multimodal AI rerouting.
+            </p>
+          </div>
+        </div>
 
         {/* Presets List */}
-        {feedLoading ? (
-          <div role="status" aria-live="polite" className="text-xs text-gray-400 py-6 text-center">Checking live network conditions...</div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {activePresets.map((preset) => {
-              const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
-                .toLowerCase()
-                .includes(preset.targetRoute.toLowerCase());
-              const isActive = activeDisruption?.id === preset.id;
+        <div className="mt-6">
+          {feedLoading ? (
+            <div role="status" aria-live="polite" className="text-xs text-slate-400 py-6 text-center flex items-center justify-center gap-2">
+              <span className="w-3.5 h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+              Scanning live network conditions...
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              {activePresets.map((preset) => {
+                const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
+                  .toLowerCase()
+                  .includes(preset.targetRoute.toLowerCase());
+                const isActive = activeDisruption?.id === preset.id;
 
-              return (
-                <button
-                  key={preset.id}
-                  onClick={() => handleTriggerPreset(preset)}
-                  aria-pressed={isActive}
-                  className={`text-left p-4 rounded-2xl border transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-red-100/30 border-red-400'
-                      : 'bg-white border-gray-200 hover:bg-gray-50'
-                  } relative`}
-                >
-                  {isTargeted && (
-                    <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-bold uppercase">
-                      Suggested
-                    </span>
-                  )}
-                  <h4 className="text-xs font-bold text-charcoal mb-1 flex items-center gap-1.5">
-                    {preset.title}
-                  </h4>
-                  <p className="text-[11px] text-gray-500 leading-normal">{preset.eventText}</p>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                return (
+                  <button
+                    key={preset.id}
+                    onClick={() => handleTriggerPreset(preset)}
+                    aria-pressed={isActive}
+                    className={`text-left p-4 rounded-2xl border transition-all cursor-pointer relative ${
+                      isActive
+                        ? 'bg-rose-50 border-rose-400 shadow-sm shadow-rose-500/10 ring-2 ring-rose-200'
+                        : 'bg-white/90 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    {isTargeted && (
+                      <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 text-[9px] font-bold uppercase tracking-wider">
+                        Active Route
+                      </span>
+                    )}
+                    <h4 className="text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5 font-display">
+                      {preset.title}
+                    </h4>
+                    <p className="text-[11px] text-slate-500 leading-normal">{preset.eventText}</p>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Loader */}
+      {/* Loading State */}
       {loading && (
-        <div role="status" aria-live="polite" className="clean-card rounded-3xl p-16 text-center">
+        <div role="status" aria-live="polite" className="glass-card rounded-3xl p-16 text-center border border-white/80">
           <div className="relative w-12 h-12 mx-auto mb-4" aria-hidden="true">
-            <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-t-charcoal animate-spin"></div>
-            <Zap className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-charcoal animate-pulse" size={18} />
+            <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
+            <div className="absolute inset-0 rounded-full border-4 border-t-teal-600 animate-spin" />
+            <Zap className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-teal-600 animate-pulse" size={18} />
           </div>
-          <h3 className="text-base font-bold text-charcoal mb-1">Rerouting Commute...</h3>
-          <p className="text-xs text-gray-500">
-            Adapter Agent mapping alternative feeder buses and transfer routes...
+          <h3 className="text-base font-bold text-slate-900 mb-1 font-display">Computing Resilient Alternative...</h3>
+          <p className="text-xs text-slate-500">
+            Adapter Agent mapping alternative feeder buses, metro hops, and transfer links...
           </p>
         </div>
       )}
 
-      {/* Replan error */}
+      {/* Replan Error */}
       {!loading && replanError && (
-        <div role="alert" className="clean-card rounded-3xl p-6 border border-red-200 bg-red-50/30 text-center">
-          <XCircle className="mx-auto mb-2 text-red-600" size={20} aria-hidden="true" />
-          <h3 className="text-sm font-bold text-charcoal mb-1">No alternative route found</h3>
-          <p className="text-xs text-gray-500">{replanError}</p>
+        <div role="alert" className="glass-card rounded-3xl p-6 border border-rose-200 bg-rose-50/40 text-center">
+          <XCircle className="mx-auto mb-2 text-rose-600" size={24} aria-hidden="true" />
+          <h3 className="text-sm font-bold text-slate-900 mb-1">No alternative route found</h3>
+          <p className="text-xs text-slate-500">{replanError}</p>
         </div>
       )}
 
       {/* Side-by-Side Comparison Panels */}
       {!loading && reroutedItinerary && activeDisruption && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fadeIn">
           
           {/* Left Panel: Disrupted Route */}
-          <div className="clean-card rounded-3xl p-6 border border-red-200 opacity-70 relative bg-gray-50/50">
-            <div className="absolute -top-3 left-6 px-3 py-1 bg-white text-red-700 border border-red-200 text-[10px] font-bold rounded-full flex items-center gap-1">
-              <XCircle size={12} /> Disrupted Commute
+          <div className="glass-card rounded-3xl p-6 border border-rose-200/80 relative bg-rose-50/15">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-100 text-rose-800 border border-rose-200 text-[10px] font-bold rounded-full mb-4">
+              <XCircle size={12} /> Disrupted Route
             </div>
 
-            <div className="mb-6 border-b border-gray-200/60 pb-4 mt-2">
-              <h3 className="text-base font-bold text-charcoal">Original Plan</h3>
-              <p className="text-[11px] text-red-600 mt-1 font-semibold flex items-center gap-1">
+            <div className="mb-6 border-b border-slate-200/80 pb-4">
+              <h3 className="text-base font-bold text-slate-900 font-display">Original Journey</h3>
+              <p className="text-[11px] text-rose-600 mt-1 font-semibold flex items-center gap-1">
                 ⚠️ Blocked: {activeDisruption.eventText}
               </p>
             </div>
 
-            {/* Original Legs in Connected Timeline */}
-            <div className="relative pl-6 border-l border-red-200 ml-4 space-y-5 py-2">
+            {/* Original Legs */}
+            <div className="relative pl-6 border-l-2 border-rose-200 ml-4 space-y-4 py-1">
               {itinerary?.legs.map((leg, idx) => {
                 const isLegBlocked = isLegBlockedByDisruption(leg);
                 const Icon = MODE_ICONS[leg.mode] || Footprints;
 
                 return (
                   <div key={idx} className="relative">
-                    {/* Circle icon centered on the timeline line */}
-                    <div className={`absolute -left-[38px] top-1.5 w-6 h-6 rounded-full border flex items-center justify-center bg-white z-20 ${
-                      isLegBlocked ? 'border-red-400 text-red-600' : 'border-gray-300 text-gray-400'
+                    <div className={`absolute -left-[37px] top-2 w-6 h-6 rounded-full border flex items-center justify-center bg-white z-20 ${
+                      isLegBlocked ? 'border-rose-400 text-rose-600' : 'border-slate-300 text-slate-400'
                     }`}>
                       <Icon size={12} />
                     </div>
 
-                    <div className={`p-3.5 rounded-xl border bg-white ${
-                      isLegBlocked ? 'border-red-200 bg-red-50/20' : 'border-gray-200/50'
+                    <div className={`p-3.5 rounded-xl border bg-white/90 ${
+                      isLegBlocked ? 'border-rose-200 bg-rose-50/40' : 'border-slate-200/60'
                     }`}>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase">{leg.mode}</span>
-                        {isLegBlocked && <span className="text-[9px] text-red-600 font-bold bg-red-100 px-2 py-0.5 rounded border border-red-200">BLOCKED</span>}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[9px] text-slate-400 font-bold uppercase">{leg.mode}</span>
+                        {isLegBlocked && <span className="text-[9px] text-rose-600 font-extrabold bg-rose-100 px-2 py-0.5 rounded border border-rose-200">BLOCKED</span>}
                       </div>
-                      <h4 className="text-xs font-bold text-gray-500 mt-0.5 line-through decoration-red-400">
+                      <h4 className="text-xs font-bold text-slate-700 line-through decoration-rose-400">
                         {leg.from} ➔ {leg.to}
                       </h4>
-                      <p className="text-[10px] text-gray-400 mt-1">{leg.name}</p>
+                      <p className="text-[10px] text-slate-400 mt-1">{leg.name}</p>
                     </div>
                   </div>
                 );
@@ -209,43 +220,43 @@ export default function DisruptionSimulator({
           </div>
 
           {/* Right Panel: Re-routed Plan */}
-          <div className="clean-card rounded-3xl p-6 border border-emerald-300/80 relative">
-            <div className="absolute -top-3 left-6 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10px] font-bold rounded-full flex items-center gap-1 animate-pulse">
-              <CheckCircle size={12} /> Copilot Rerouted
+          <div className="glass-card rounded-3xl p-6 border border-teal-300 relative bg-teal-50/15 glow-teal">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-100 text-teal-900 border border-teal-300 text-[10px] font-bold rounded-full mb-4 animate-pulse">
+              <CheckCircle size={12} /> AI Copilot Rerouted
             </div>
 
-            {/* Metrics Change */}
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4 mt-2 mb-6">
+            {/* Metrics Comparison Header */}
+            <div className="flex items-center justify-between border-b border-slate-200/80 pb-4 mb-6">
               <div>
-                <h3 className="text-base font-bold text-charcoal">Adapted Commute</h3>
-                <p className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                  ✨ Multi-leg optimization complete
+                <h3 className="text-base font-bold text-slate-900 font-display">Adapted Alternative</h3>
+                <p className="text-[11px] text-teal-700 font-semibold">
+                  ✨ Multi-modal bypass resolved
                 </p>
               </div>
 
               {/* Comparing Metrics */}
               <div className="flex items-center gap-2">
-                <div className="bg-gray-50 border border-gray-100 px-3 py-1 rounded-xl text-center">
-                  <div className="text-[8px] text-gray-400 font-bold uppercase">Time</div>
-                  <div className="text-[11px] font-bold text-charcoal flex items-center gap-1 justify-center">
-                    <span className="line-through text-gray-400 text-[9px]">{itinerary.total_duration}m</span>
-                    <ArrowRight size={10} className="text-emerald-600" />
-                    <span className="text-emerald-700">{reroutedItinerary.total_duration}m</span>
+                <div className="bg-white/90 border border-slate-200 px-3 py-1.5 rounded-xl text-center shadow-2xs">
+                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Time</div>
+                  <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1 justify-center">
+                    <span className="line-through text-slate-400 text-[10px]">{itinerary.total_duration}m</span>
+                    <ArrowRight size={10} className="text-teal-600" />
+                    <span className="text-teal-700">{reroutedItinerary.total_duration}m</span>
                   </div>
                 </div>
-                <div className="bg-gray-50 border border-gray-100 px-3 py-1 rounded-xl text-center">
-                  <div className="text-[8px] text-gray-400 font-bold uppercase">Fare</div>
-                  <div className="text-[11px] font-bold text-charcoal flex items-center gap-1 justify-center">
-                    <span className="line-through text-gray-400 text-[9px]">₹{itinerary.total_cost}</span>
-                    <ArrowRight size={10} className="text-emerald-600" />
-                    <span className="text-emerald-700">₹{reroutedItinerary.total_cost}</span>
+                <div className="bg-white/90 border border-slate-200 px-3 py-1.5 rounded-xl text-center shadow-2xs">
+                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Fare</div>
+                  <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1 justify-center">
+                    <span className="line-through text-slate-400 text-[10px]">₹{itinerary.total_cost}</span>
+                    <ArrowRight size={10} className="text-teal-600" />
+                    <span className="text-teal-700">₹{reroutedItinerary.total_cost}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Adapted Legs in Connected Timeline */}
-            <div className="relative pl-6 border-l border-emerald-300 ml-4 space-y-5 py-2 mb-6">
+            {/* Adapted Legs */}
+            <div className="relative pl-6 border-l-2 border-teal-400 ml-4 space-y-4 py-1 mb-6">
               {reroutedItinerary.legs.map((leg, idx) => {
                 const isNewLeg = !itinerary?.legs.some(oldLeg => 
                   oldLeg.from.toLowerCase() === leg.from.toLowerCase() && 
@@ -257,24 +268,23 @@ export default function DisruptionSimulator({
 
                 return (
                   <div key={idx} className="relative">
-                    {/* Circle icon centered on the timeline line */}
-                    <div className={`absolute -left-[38px] top-1.5 w-6 h-6 rounded-full border flex items-center justify-center bg-white z-20 ${
-                      isNewLeg ? 'border-emerald-400 text-emerald-700 bg-emerald-50' : 'border-gray-300 text-gray-400'
+                    <div className={`absolute -left-[37px] top-2 w-6 h-6 rounded-full border flex items-center justify-center bg-white z-20 ${
+                      isNewLeg ? 'border-teal-500 text-teal-700 bg-teal-50' : 'border-slate-300 text-slate-400'
                     }`}>
                       <Icon size={12} />
                     </div>
 
-                    <div className={`p-3.5 rounded-xl border bg-white ${
-                      isNewLeg ? 'border-emerald-200 bg-emerald-50/10' : 'border-gray-200/50'
+                    <div className={`p-3.5 rounded-xl border bg-white/95 ${
+                      isNewLeg ? 'border-teal-200 bg-teal-50/30' : 'border-slate-200/60'
                     }`}>
-                      <div className="flex items-center justify-between">
-                        <span className={`text-[9px] font-bold uppercase ${isNewLeg ? 'text-emerald-700' : 'text-gray-400'}`}>{leg.mode}</span>
-                        {isNewLeg && <span className="text-[9px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">NEW LEG</span>}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`text-[9px] font-bold uppercase ${isNewLeg ? 'text-teal-700' : 'text-slate-400'}`}>{leg.mode}</span>
+                        {isNewLeg && <span className="text-[9px] text-teal-800 font-extrabold bg-teal-100 px-2 py-0.5 rounded border border-teal-200">NEW ROUTE LEG</span>}
                       </div>
-                      <h4 className="text-xs font-bold text-charcoal mt-0.5">
+                      <h4 className="text-xs font-bold text-slate-900">
                         {leg.from} ➔ {leg.to}
                       </h4>
-                      <p className="text-[10px] text-gray-600 mt-1">{leg.details}</p>
+                      <p className="text-[10px] text-slate-600 mt-1">{leg.details}</p>
                     </div>
                   </div>
                 );
@@ -282,11 +292,11 @@ export default function DisruptionSimulator({
             </div>
 
             {/* Adapter Agent Reasoning */}
-            <div className="p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <h4 className="text-[10px] font-bold text-charcoal uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <Info size={14} className="text-emerald-700" /> Rerouting Explanation
+            <div className="p-4 rounded-2xl bg-white/90 border border-teal-100 shadow-2xs">
+              <h4 className="text-[10px] font-bold text-teal-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Info size={14} className="text-teal-600" /> Rerouting Explanation
               </h4>
-              <p className="text-[11px] text-gray-700 leading-relaxed font-sans italic">
+              <p className="text-xs text-slate-700 leading-relaxed font-sans italic">
                 "{reroutedItinerary.explanation}"
               </p>
             </div>
