@@ -9,7 +9,11 @@ import {
   TrendingDown,
   Activity,
   Search,
-  LocateFixed
+  LocateFixed,
+  Train,
+  Ship,
+  Bus,
+  ArrowRight
 } from 'lucide-react';
 import transitData from '../data.json';
 import { detectNearestStation } from '../lib/geolocation.js';
