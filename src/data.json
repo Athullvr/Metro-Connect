@@ -100,6 +100,17 @@
         "frequency_min": 20,
         "operating_hours": "07:30 - 20:30",
         "price_inr": 30
+      },
+      {
+        "id": "sc_el",
+        "name": "South Chittoor - Eloor",
+        "from": "south_chittoor",
+        "to": "eloor",
+        "stops": ["south_chittoor", "eloor"],
+        "duration_min": 15,
+        "frequency_min": 30,
+        "operating_hours": "08:30 - 18:30",
+        "price_inr": 20
       }
     ]
   },
@@ -203,6 +214,7 @@
     { "query": "Mattancherry Palace", "node_id": "mattancherry" },
     { "query": "Marine Drive", "node_id": "high_court" },
     { "query": "Infopark", "node_id": "infopark_phase_1" },
+    { "query": "Eloor", "node_id": "eloor" },
     { "query": "Kochi Airport", "node_id": "cial_airport_terminal_3" }
   ]
 }

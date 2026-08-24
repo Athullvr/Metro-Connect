@@ -36,6 +36,14 @@ const SUGGESTIONS = [
   }
 ];
 
+// Collect and group transit stops from data.json once
+const ALL_STOPS = [
+  ...transitData.metro_line.stations.map(s => ({ name: s.name, type: 'Kochi Metro Station' })),
+  ...transitData.water_metro.jetties.map(j => ({ name: j.name, type: 'Water Metro Jetty' })),
+  ...Array.from(new Set(transitData.feeder_buses.flatMap(fb => fb.stops)))
+    .map(stop => ({ name: stop, type: 'Feeder Bus Stop' }))
+];
+
 export default function Home({
   onPlan,
   useSimulator,
@@ -81,24 +89,12 @@ export default function Home({
     speed: true
   });
 
-  // Collect and group transit stops from data.json
-  const getGroupedStops = () => {
-    const metro = transitData.metro_line.stations.map(s => ({ name: s.name, type: 'Kochi Metro Station' }));
-    const water = transitData.water_metro.jetties.map(j => ({ name: j.name, type: 'Water Metro Jetty' }));
-    const bus = Array.from(new Set(transitData.feeder_buses.flatMap(fb => fb.stops)))
-      .map(stop => ({ name: stop, type: 'Feeder Bus Stop' }));
-
-    return [...metro, ...water, ...bus];
-  };
-
-  const allStops = getGroupedStops();
-
   // Filter suggestions dynamically
   useEffect(() => {
     if (!origin) {
-      setOriginSuggestions(allStops.slice(0, 5)); // show first few as defaults
+      setOriginSuggestions(ALL_STOPS.slice(0, 5)); // show first few as defaults
     } else {
-      const filtered = allStops.filter(s => 
+      const filtered = ALL_STOPS.filter(s => 
         s.name.toLowerCase().includes(origin.toLowerCase())
       );
       setOriginSuggestions(filtered);
@@ -107,9 +103,9 @@ export default function Home({
 
   useEffect(() => {
     if (!destination) {
-      setDestSuggestions(allStops.slice(0, 5));
+      setDestSuggestions(ALL_STOPS.slice(0, 5));
     } else {
-      const filtered = allStops.filter(s => 
+      const filtered = ALL_STOPS.filter(s => 
         s.name.toLowerCase().includes(destination.toLowerCase())
       );
       setDestSuggestions(filtered);

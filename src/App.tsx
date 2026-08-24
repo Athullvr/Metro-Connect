@@ -4,14 +4,9 @@ import Itinerary from './components/Itinerary';
 import DisruptionSimulator from './components/DisruptionSimulator';
 import { planRoute, replanRoute } from './services/openai';
 import { saveTrip } from './lib/tripHistory.js';
-import { Train, Ship, Bus } from 'lucide-react';
 
 export default function App() {
   const [screen, setScreen] = useState('home'); // 'home' | 'itinerary' | 'disruption'
-  const [origin, setOrigin] = useState('');
-  const [destination, setDestination] = useState('');
-  const [constraints, setConstraints] = useState({});
-  
   const [itinerary, setItinerary] = useState(null);
   const [reroutedItinerary, setReroutedItinerary] = useState(null);
 
@@ -21,9 +16,6 @@ export default function App() {
   const [replanError, setReplanError] = useState(null);
 
   const handlePlanRoute = async (src, dest, activeConstraints) => {
-    setOrigin(src);
-    setDestination(dest);
-    setConstraints(activeConstraints);
     setLoading(true);
     setPlanError(null);
 

@@ -39,6 +39,13 @@ describe('findShortestPath', () => {
     expect(path[path.length - 1].to).toBe('vyttila');
   });
 
+  it('connects Eloor Jetty to the Water Metro network via South Chittoor', () => {
+    const path = findShortestPath('high_court', 'eloor');
+    expect(path).not.toBeNull();
+    expect(path[0].from).toBe('high_court');
+    expect(path[path.length - 1].to).toBe('eloor');
+  });
+
   it('returns null for unknown node ids', () => {
     expect(findShortestPath('not_a_real_node', 'vyttila')).toBeNull();
     expect(findShortestPath('aluva', 'not_a_real_node')).toBeNull();

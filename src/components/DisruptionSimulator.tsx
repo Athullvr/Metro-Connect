@@ -5,8 +5,6 @@ import {
   CheckCircle,
   XCircle,
   ArrowRight,
-  Clock,
-  Coins,
   Zap,
   Info,
   Train,
