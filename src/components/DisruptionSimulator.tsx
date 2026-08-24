@@ -10,7 +10,10 @@ import {
   Train,
   Ship,
   Bus,
-  Footprints
+  Footprints,
+  Send,
+  Sparkles,
+  Check
 } from 'lucide-react';
 import { fetchDisruptions } from '../services/disruptions.js';
 
@@ -26,6 +29,7 @@ export default function DisruptionSimulator({
   reroutedItinerary,
   onBack,
   onReplan,
+  onAcceptReroute,
   loading,
   replanError,
   useSimulator
@@ -33,6 +37,8 @@ export default function DisruptionSimulator({
   const [activeDisruption, setActiveDisruption] = useState(null);
   const [disruptions, setDisruptions] = useState([]);
   const [feedLoading, setFeedLoading] = useState(true);
+  const [customInput, setCustomInput] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
     let cancelled = false;
@@ -53,20 +59,38 @@ export default function DisruptionSimulator({
     await onReplan(preset.eventText);
   };
 
-  const getActivePresets = () => {
+  const handleCustomSubmit = async (e) => {
+    e.preventDefault();
+    if (!customInput.trim()) return;
+    const customEvent = {
+      id: 'custom_' + Date.now(),
+      title: 'Custom Event',
+      targetRoute: '',
+      eventText: customInput.trim()
+    };
+    setActiveDisruption(customEvent);
+    await onReplan(customEvent.eventText);
+  };
+
+  const getFilteredPresets = () => {
     const destination = (itinerary?.legs[itinerary.legs.length - 1]?.to || '').toLowerCase();
-    return [...disruptions].sort((a, b) => {
+    let list = [...disruptions];
+
+    if (selectedFilter === 'water') {
+      list = list.filter(d => d.targetRoute.toLowerCase().includes('water') || d.targetRoute.toLowerCase().includes('jetty') || d.eventText.toLowerCase().includes('jetty') || d.eventText.toLowerCase().includes('water'));
+    } else if (selectedFilter === 'metro') {
+      list = list.filter(d => d.eventText.toLowerCase().includes('metro') || d.title.toLowerCase().includes('metro'));
+    }
+
+    return list.sort((a, b) => {
       const aMatch = destination.includes(a.targetRoute.toLowerCase());
       const bMatch = destination.includes(b.targetRoute.toLowerCase());
-      return bMatch - aMatch;
+      return (bMatch ? 1 : 0) - (aMatch ? 1 : 0);
     });
   };
 
-  const activePresets = getActivePresets();
+  const filteredPresets = getFilteredPresets();
 
-  // A leg is "blocked" by the active disruption if the event text mentions
-  // the stops or route name it runs on — generalizes across any live/mock
-  // disruption instead of matching a fixed set of preset ids.
   const isLegBlockedByDisruption = (leg) => {
     if (!activeDisruption) return false;
     const text = activeDisruption.eventText.toLowerCase();
@@ -77,34 +101,106 @@ export default function DisruptionSimulator({
     );
   };
 
+  // Delta calculations
+  const durationDelta = reroutedItinerary && itinerary ? reroutedItinerary.total_duration - itinerary.total_duration : 0;
+  const costDelta = reroutedItinerary && itinerary ? reroutedItinerary.total_cost - itinerary.total_cost : 0;
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-8 md:py-10 animate-fadeIn relative z-10">
-      {/* Back Navigation */}
-      <button 
-        onClick={onBack}
-        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold mb-6 bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
-      >
-        <ArrowLeft size={14} /> Back to Itinerary
-      </button>
+      {/* Top Action Bar */}
+      <div className="flex items-center justify-between mb-6">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
+        >
+          <ArrowLeft size={14} /> Back to Itinerary
+        </button>
 
-      {/* Disruption Settings Card */}
-      <div className="glass-card rounded-3xl p-6 md:p-8 mb-8 border border-rose-200/80 bg-gradient-to-br from-rose-50/30 via-white to-amber-50/20">
+        {reroutedItinerary && onAcceptReroute && (
+          <button
+            onClick={() => onAcceptReroute(reroutedItinerary)}
+            className="flex items-center gap-2 text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm shadow-teal-600/25"
+          >
+            <Check size={14} /> Adopt Rerouted Alternative
+          </button>
+        )}
+      </div>
+
+      {/* Disruption Control Center Container */}
+      <div className="glass-card rounded-3xl p-6 md:p-8 mb-8 border border-rose-200/80 bg-gradient-to-br from-rose-50/40 via-white to-amber-50/20">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center border border-rose-200">
-            <AlertTriangle size={18} />
+          <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center border border-rose-200 shadow-2xs">
+            <AlertTriangle size={20} />
           </div>
           <div>
             <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 font-display tracking-tight">
               Transit Disruption Control Center
             </h2>
             <p className="text-xs text-slate-500 font-medium">
-              Simulate live weather or channel closures in Kochi to trigger instant multimodal AI rerouting.
+              Simulate weather, high-tide closures, or maintenance to trigger real-time multimodal graph rerouting.
             </p>
           </div>
         </div>
 
+        {/* Custom Disruption Input Form */}
+        <form onSubmit={handleCustomSubmit} className="mt-6 mb-6">
+          <label className="block text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">
+            Test Custom Transit Event
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+              placeholder="E.g., High Court Water Metro Jetty is closed due to rough weather..."
+              className="flex-1 bg-white/90 border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 rounded-xl px-4 py-3 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-2xs"
+            />
+            <button
+              type="submit"
+              disabled={loading || !customInput.trim()}
+              className="px-5 py-3 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-xl transition-all cursor-pointer disabled:opacity-40 inline-flex items-center gap-1.5 shrink-0 shadow-xs"
+            >
+              <Send size={13} /> Run Reroute
+            </button>
+          </div>
+        </form>
+
+        {/* Category Filters */}
+        <div className="flex items-center justify-between flex-wrap gap-2 border-t border-slate-200/60 pt-4 mb-3">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick Simulation Presets:</span>
+          <div className="flex items-center gap-1 bg-slate-100/70 p-1 rounded-xl border border-slate-200/60">
+            <button
+              type="button"
+              onClick={() => setSelectedFilter('all')}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                selectedFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              All Events
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedFilter('water')}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                selectedFilter === 'water' ? 'bg-white text-sky-800 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Water Metro
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedFilter('metro')}
+              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                selectedFilter === 'metro' ? 'bg-white text-teal-800 shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Metro Rail
+            </button>
+          </div>
+        </div>
+
         {/* Presets List */}
-        <div className="mt-6">
+        <div>
           {feedLoading ? (
             <div role="status" aria-live="polite" className="text-xs text-slate-400 py-6 text-center flex items-center justify-center gap-2">
               <span className="w-3.5 h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
@@ -112,7 +208,7 @@ export default function DisruptionSimulator({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-              {activePresets.map((preset) => {
+              {filteredPresets.map((preset) => {
                 const isTargeted = (itinerary?.legs[itinerary?.legs.length - 1]?.to || '')
                   .toLowerCase()
                   .includes(preset.targetRoute.toLowerCase());
@@ -156,7 +252,7 @@ export default function DisruptionSimulator({
           </div>
           <h3 className="text-base font-bold text-slate-900 mb-1 font-display">Computing Resilient Alternative...</h3>
           <p className="text-xs text-slate-500">
-            Adapter Agent mapping alternative feeder buses, metro hops, and transfer links...
+            Adapter Agent mapping alternative feeder buses, road links, and transfer options...
           </p>
         </div>
       )}
@@ -221,35 +317,53 @@ export default function DisruptionSimulator({
 
           {/* Right Panel: Re-routed Plan */}
           <div className="glass-card rounded-3xl p-6 border border-teal-300 relative bg-teal-50/15 glow-teal">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-100 text-teal-900 border border-teal-300 text-[10px] font-bold rounded-full mb-4 animate-pulse">
-              <CheckCircle size={12} /> AI Copilot Rerouted
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-100 text-teal-900 border border-teal-300 text-[10px] font-bold rounded-full animate-pulse">
+                <CheckCircle size={12} /> AI Copilot Rerouted
+              </div>
+
+              {onAcceptReroute && (
+                <button
+                  onClick={() => onAcceptReroute(reroutedItinerary)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-600 hover:bg-teal-700 text-white text-[10px] font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  <Check size={11} /> Adopt Route
+                </button>
+              )}
             </div>
 
             {/* Metrics Comparison Header */}
             <div className="flex items-center justify-between border-b border-slate-200/80 pb-4 mb-6">
               <div>
                 <h3 className="text-base font-bold text-slate-900 font-display">Adapted Alternative</h3>
-                <p className="text-[11px] text-teal-700 font-semibold">
-                  ✨ Multi-modal bypass resolved
+                <p className="text-[11px] text-teal-700 font-semibold flex items-center gap-1">
+                  <Sparkles size={12} /> Multi-modal bypass resolved
                 </p>
               </div>
 
-              {/* Comparing Metrics */}
+              {/* Comparing Metrics with Delta Badges */}
               <div className="flex items-center gap-2">
                 <div className="bg-white/90 border border-slate-200 px-3 py-1.5 rounded-xl text-center shadow-2xs">
-                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Time</div>
+                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Duration</div>
                   <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1 justify-center">
                     <span className="line-through text-slate-400 text-[10px]">{itinerary.total_duration}m</span>
                     <ArrowRight size={10} className="text-teal-600" />
                     <span className="text-teal-700">{reroutedItinerary.total_duration}m</span>
                   </div>
+                  <div className="text-[8px] font-bold mt-0.5 text-teal-700">
+                    {durationDelta > 0 ? `+${durationDelta}m` : `${durationDelta}m`}
+                  </div>
                 </div>
+
                 <div className="bg-white/90 border border-slate-200 px-3 py-1.5 rounded-xl text-center shadow-2xs">
-                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Fare</div>
+                  <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Est. Fare</div>
                   <div className="text-xs font-extrabold text-slate-900 flex items-center gap-1 justify-center">
                     <span className="line-through text-slate-400 text-[10px]">₹{itinerary.total_cost}</span>
                     <ArrowRight size={10} className="text-teal-600" />
                     <span className="text-teal-700">₹{reroutedItinerary.total_cost}</span>
+                  </div>
+                  <div className="text-[8px] font-bold mt-0.5 text-teal-700">
+                    {costDelta > 0 ? `+₹${costDelta}` : costDelta < 0 ? `-₹${Math.abs(costDelta)}` : 'Same fare'}
                   </div>
                 </div>
               </div>

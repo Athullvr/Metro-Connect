@@ -20,18 +20,21 @@ const SUGGESTIONS = [
     origin: 'Aluva',
     destination: 'Fort Kochi',
     label: 'Aluva ➔ Fort Kochi',
+    badge: '52m · ₹50',
     desc: 'Metro + Walk + Water Metro'
   },
   {
     origin: 'Vyttila',
     destination: 'Kakkanad Jetty',
     label: 'Vyttila ➔ Kakkanad',
+    badge: '25m · ₹30',
     desc: 'Water Metro Bypass'
   },
   {
     origin: 'Kalamassery',
     destination: 'Infopark',
     label: 'Kalamassery ➔ Infopark',
+    badge: '35m · ₹35',
     desc: 'IT e-Bus Feeder'
   }
 ];
@@ -290,8 +293,19 @@ export default function Home({
                     setShowDestDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowOriginDropdown(false))}
-                  className="w-full bg-white/90 border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 rounded-xl pl-10 pr-4 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
+                  className="w-full bg-white/90 border border-slate-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 rounded-xl pl-10 pr-9 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
                 />
+                {origin && (
+                  <button
+                    type="button"
+                    onClick={() => setOrigin('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-100 transition-all cursor-pointer"
+                    title="Clear start station"
+                    aria-label="Clear start station"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
               {locationError && (
                 <p role="alert" className="text-[10px] text-rose-500 mt-1 font-medium">{locationError}</p>
@@ -367,8 +381,19 @@ export default function Home({
                     setShowOriginDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowDestDropdown(false))}
-                  className="w-full bg-white/90 border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl pl-10 pr-4 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
+                  className="w-full bg-white/90 border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 rounded-xl pl-10 pr-9 py-3.5 text-slate-800 text-xs font-medium focus:outline-none transition-all shadow-xs"
                 />
+                {destination && (
+                  <button
+                    type="button"
+                    onClick={() => setDestination('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded-full hover:bg-slate-100 transition-all cursor-pointer"
+                    title="Clear destination"
+                    aria-label="Clear destination"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
 
               {/* Suggestions Dropdown overlay */}
@@ -500,9 +525,10 @@ export default function Home({
               key={idx}
               type="button"
               onClick={() => handleSuggestClick(s)}
-              className="text-xs bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-800 px-3 py-1.5 rounded-full transition-all cursor-pointer font-medium"
+              className="text-xs bg-slate-50 hover:bg-teal-50 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-800 px-3 py-1.5 rounded-full transition-all cursor-pointer font-medium inline-flex items-center gap-1.5 shadow-2xs hover:scale-102"
             >
-              {s.label}
+              <span>{s.label}</span>
+              <span className="text-[9px] font-bold text-teal-700 bg-teal-100/70 px-1.5 py-0.2 rounded-full border border-teal-200">{s.badge}</span>
             </button>
           ))}
         </div>

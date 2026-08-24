@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Train, 
   Ship, 
@@ -9,7 +9,10 @@ import {
   AlertTriangle, 
   ArrowRight,
   Sparkles,
-  Zap
+  Zap,
+  Share2,
+  Check,
+  Receipt
 } from 'lucide-react';
 
 const MODE_CONFIG = {
@@ -48,17 +51,66 @@ export default function Itinerary({
   onBack, 
   onTriggerDisruptionSim 
 }) {
+  const [copied, setCopied] = useState(false);
+  const [showFareDetails, setShowFareDetails] = useState(false);
+
   if (!itinerary) return null;
+
+  const handleShare = async () => {
+    const summary = `Metro Connect Journey:
+From: ${itinerary.legs[0]?.from}
+To: ${itinerary.legs[itinerary.legs.length - 1]?.to}
+Total Duration: ${itinerary.total_duration} mins
+Total Fare: ₹${itinerary.total_cost}
+
+Legs:
+${itinerary.legs.map((l, i) => `${i + 1}. [${l.mode.toUpperCase()}] ${l.from} ➔ ${l.to} (${l.duration}m · ₹${l.cost})`).join('\n')}
+
+Reasoning: ${itinerary.explanation}`;
+
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(summary);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      }
+    } catch (e) {
+      console.warn('Could not copy to clipboard', e);
+    }
+  };
+
+  // Compute sub-fares
+  const metroCost = itinerary.legs.filter(l => l.mode === 'metro').reduce((sum, l) => sum + l.cost, 0);
+  const waterCost = itinerary.legs.filter(l => l.mode === 'water_metro').reduce((sum, l) => sum + l.cost, 0);
+  const feederCost = itinerary.legs.filter(l => l.mode === 'feeder_bus').reduce((sum, l) => sum + l.cost, 0);
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8 md:py-10 animate-fadeIn relative z-10">
-      {/* Back Navigation */}
-      <button 
-        onClick={onBack}
-        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold mb-6 bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
-      >
-        <ArrowLeft size={14} /> Back to Search
-      </button>
+      {/* Top Action Bar */}
+      <div className="flex items-center justify-between mb-6">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold bg-white/90 border border-slate-200 hover:bg-white px-4 py-2 rounded-xl cursor-pointer shadow-xs"
+        >
+          <ArrowLeft size={14} /> Back to Search
+        </button>
+
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-2 text-slate-700 hover:text-teal-700 bg-white/90 border border-slate-200 hover:border-teal-300 hover:bg-teal-50/50 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-xs"
+          title="Copy itinerary summary to clipboard"
+        >
+          {copied ? (
+            <>
+              <Check size={14} className="text-teal-600" /> Copied to Clipboard
+            </>
+          ) : (
+            <>
+              <Share2 size={14} /> Share Journey Pass
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Digital Transit Boarding Pass Header */}
       <div className="glass-card rounded-3xl p-6 md:p-8 mb-8 border border-white/80 relative overflow-hidden">
@@ -89,17 +141,41 @@ export default function Itinerary({
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 bg-slate-50/90 border border-slate-200/80 px-4 py-2.5 rounded-2xl shadow-xs">
+            <div 
+              onClick={() => setShowFareDetails(!showFareDetails)}
+              className="flex items-center gap-2.5 bg-slate-50/90 border border-slate-200/80 px-4 py-2.5 rounded-2xl shadow-xs cursor-pointer hover:bg-slate-100/80 transition-colors"
+              title="Click to view fare breakdown"
+            >
               <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xs">
                 ₹
               </div>
               <div>
-                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Est. Fare</div>
+                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                  Est. Fare <Receipt size={9} />
+                </div>
                 <div className="text-sm font-extrabold text-slate-900 font-display">₹{itinerary.total_cost}</div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Fare Breakdown Sub-Card (Collapsible/Interactive) */}
+        {showFareDetails && (
+          <div className="mt-5 pt-4 border-t border-slate-200/80 grid grid-cols-3 gap-3 text-center animate-fadeIn">
+            <div className="p-2.5 rounded-xl bg-teal-50/60 border border-teal-100">
+              <span className="text-[9px] font-bold text-teal-800 uppercase block">Metro Blue Line</span>
+              <span className="text-xs font-extrabold text-teal-900">₹{metroCost}</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-sky-50/60 border border-sky-100">
+              <span className="text-[9px] font-bold text-sky-800 uppercase block">Water Metro</span>
+              <span className="text-xs font-extrabold text-sky-900">₹{waterCost}</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-amber-50/60 border border-amber-100">
+              <span className="text-[9px] font-bold text-amber-800 uppercase block">Feeder Buses</span>
+              <span className="text-xs font-extrabold text-amber-900">₹{feederCost}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Connected Visual Timeline */}

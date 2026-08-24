@@ -47,6 +47,12 @@ export default function App() {
     }
   };
 
+  const handleAcceptReroute = (newPlan) => {
+    setItinerary(newPlan);
+    setReroutedItinerary(null);
+    setScreen('itinerary');
+  };
+
   return (
     <div className="min-h-screen bg-canvas text-slate-800 flex flex-col font-sans select-none relative">
       {/* Atmospheric Ambient Glow Layer */}
@@ -114,6 +120,7 @@ export default function App() {
             reroutedItinerary={reroutedItinerary}
             onBack={() => setScreen('itinerary')}
             onReplan={handleReplanRoute}
+            onAcceptReroute={handleAcceptReroute}
             loading={loading}
             replanError={replanError}
             useSimulator={useSimulator}
