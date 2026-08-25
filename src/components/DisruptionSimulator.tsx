@@ -141,22 +141,22 @@ export default function DisruptionSimulator({
         </div>
 
         {/* Custom Disruption Input Form */}
-        <form onSubmit={handleCustomSubmit} className="mt-6 mb-5">
+        <form onSubmit={handleCustomSubmit} className="mt-5 mb-4 sm:mt-6 sm:mb-5">
           <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-display mb-1.5">
             Simulate Custom Incident
           </label>
-          <div className="flex gap-2.5">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5">
             <input
               type="text"
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
               placeholder="E.g., High Court Water Metro Jetty closed due to high tide..."
-              className="flex-1 transit-input px-4 py-2.5 text-xs font-medium bg-white"
+              className="flex-1 transit-input px-3.5 sm:px-4 py-2.5 text-xs font-medium bg-white"
             />
             <button
               type="submit"
               disabled={loading || !customInput.trim()}
-              className="px-5 py-2.5 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-full transition-all duration-200 cursor-pointer disabled:opacity-40 inline-flex items-center gap-1.5 shrink-0 font-display uppercase tracking-wider hover:scale-102"
+              className="px-5 py-2.5 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded-full transition-all duration-200 cursor-pointer disabled:opacity-40 inline-flex items-center justify-center gap-1.5 shrink-0 font-display uppercase tracking-wider hover:scale-102 active:scale-95"
             >
               <Send size={13} /> Run Reroute
             </button>
@@ -164,13 +164,13 @@ export default function DisruptionSimulator({
         </form>
 
         {/* Category Filters */}
-        <div className="flex items-center justify-between flex-wrap gap-2 border-t border-slate-100 pt-4 mb-4">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-display">Simulation Presets:</span>
-          <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-full border border-slate-200">
+        <div className="flex items-center justify-between flex-wrap gap-2 border-t border-slate-100 pt-3.5 mb-3.5">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-display shrink-0">Simulation Presets:</span>
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-full border border-slate-200 overflow-x-auto no-scrollbar">
             <button
               type="button"
               onClick={() => setSelectedFilter('all')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all duration-200 cursor-pointer shrink-0 ${
                 selectedFilter === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -179,7 +179,7 @@ export default function DisruptionSimulator({
             <button
               type="button"
               onClick={() => setSelectedFilter('water')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all duration-200 cursor-pointer shrink-0 ${
                 selectedFilter === 'water' ? 'bg-white text-[#0284c7] shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -188,7 +188,7 @@ export default function DisruptionSimulator({
             <button
               type="button"
               onClick={() => setSelectedFilter('metro')}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all duration-200 cursor-pointer shrink-0 ${
                 selectedFilter === 'metro' ? 'bg-white text-[#009999] shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >

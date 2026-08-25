@@ -515,33 +515,35 @@ export default function Home({
           </button>
         </form>
 
-        {/* Popular Route Shortcuts */}
-        <div className="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center gap-2.5 text-left">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display">Frequent Routes:</span>
-          {SUGGESTIONS.map((s, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleSuggestClick(s)}
-              className="text-xs bg-slate-50 hover:bg-[#e6f8f7] border border-slate-200 hover:border-[#99dedb] text-slate-700 hover:text-[#009999] px-3 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.02] cursor-pointer font-medium inline-flex items-center gap-2 shadow-2xs"
-            >
-              <span>{s.label}</span>
-              <span className="text-[10px] font-bold text-[#009999] bg-[#e6f8f7] px-2 py-0.5 rounded-full border border-[#99dedb]">{s.badge}</span>
-            </button>
-          ))}
+        {/* Popular Route Shortcuts (Swipeable on Mobile) */}
+        <div className="mt-6 pt-5 border-t border-slate-100 text-left">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display block mb-2 sm:inline-block sm:mr-2.5 sm:mb-0">Frequent Routes:</span>
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            {SUGGESTIONS.map((s, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleSuggestClick(s)}
+                className="text-xs bg-slate-50 hover:bg-[#e6f8f7] border border-slate-200 hover:border-[#99dedb] text-slate-700 hover:text-[#009999] px-3 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer font-medium inline-flex items-center gap-2 shrink-0 shadow-2xs"
+              >
+                <span>{s.label}</span>
+                <span className="text-[10px] font-bold text-[#009999] bg-[#e6f8f7] px-2 py-0.5 rounded-full border border-[#99dedb]">{s.badge}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Recent Searches */}
+        {/* Recent Searches (Swipeable on Mobile) */}
         {recentTrips.length > 0 && (
           <div className="mt-3.5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-left flex-wrap gap-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display">Recent:</span>
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display shrink-0">Recent:</span>
               {recentTrips.slice(0, 3).map((trip) => (
                 <button
                   key={trip.id}
                   type="button"
                   onClick={() => handleSuggestClick({ origin: trip.origin, destination: trip.destination })}
-                  className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full transition-colors cursor-pointer font-medium"
+                  className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full transition-colors cursor-pointer font-medium shrink-0 active:scale-95"
                 >
                   {trip.origin} ➔ {trip.destination}
                 </button>
@@ -550,7 +552,7 @@ export default function Home({
             <button
               type="button"
               onClick={handleClearHistory}
-              className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+              className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer shrink-0"
             >
               Clear
             </button>

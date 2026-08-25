@@ -272,3 +272,17 @@ h1, h2, h3, h4, h5, h6 {
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #009999;
 }
+
+/* Hide scrollbar for mobile swipe chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Mobile Safe Area Bottom Padding */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}

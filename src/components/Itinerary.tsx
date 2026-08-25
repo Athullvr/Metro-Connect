@@ -116,43 +116,43 @@ Routing Logic: ${itinerary.explanation}`;
       </div>
 
       {/* Transit Boarding Ticket Header */}
-      <div className="kmrl-glass-card p-6 md:p-7 mb-8 border-t-4 border-t-[#009999] relative bg-white">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="kmrl-glass-card p-4 sm:p-7 mb-6 sm:mb-8 border-t-4 border-t-[#009999] relative bg-white">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="text-[11px] font-bold text-[#009999] uppercase tracking-widest mb-1.5 font-display flex items-center gap-2">
+            <div className="text-[10px] sm:text-[11px] font-bold text-[#009999] uppercase tracking-widest mb-1 font-display flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#009999] animate-kmrl-pulse" />
               Recommended Multimodal Journey
             </div>
-            <h2 className="text-xl md:text-3xl font-black text-slate-900 flex items-center gap-2.5 font-display tracking-tight">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 flex items-center gap-2 font-display tracking-tight flex-wrap">
               <span>{itinerary.legs[0]?.from}</span>
-              <ArrowRight size={20} className="text-[#009999] shrink-0" /> 
+              <ArrowRight size={18} className="text-[#009999] shrink-0" /> 
               <span>{itinerary.legs[itinerary.legs.length - 1]?.to}</span>
             </h2>
           </div>
           
           {/* Quick Metrics */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 px-3.5 py-2.5 rounded-2xl shadow-2xs">
-              <Clock size={16} className="text-[#009999]" />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex-1 sm:flex-none flex items-center gap-2 bg-slate-50 border border-slate-200/90 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl sm:rounded-2xl shadow-2xs">
+              <Clock size={15} className="text-[#009999] shrink-0" />
               <div>
-                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-display">Total Duration</div>
-                <div className="text-sm font-bold text-slate-900 font-display">{itinerary.total_duration} mins</div>
+                <div className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-wider font-display">Duration</div>
+                <div className="text-xs sm:text-sm font-bold text-slate-900 font-display">{itinerary.total_duration} mins</div>
               </div>
             </div>
 
             <div 
               onClick={() => setShowFareDetails(!showFareDetails)}
-              className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 px-3.5 py-2.5 rounded-2xl cursor-pointer hover:bg-[#e6f8f7] hover:border-[#99dedb] transition-all duration-200 shadow-2xs group"
+              className="flex-1 sm:flex-none flex items-center gap-2 bg-slate-50 border border-slate-200/90 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl sm:rounded-2xl cursor-pointer hover:bg-[#e6f8f7] hover:border-[#99dedb] transition-all duration-200 shadow-2xs group"
               title="Click to view fare breakdown"
             >
-              <div className="w-6 h-6 rounded-full bg-[#009999] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#009999] text-white flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-xs shrink-0">
                 ₹
               </div>
               <div>
-                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1 font-display group-hover:text-[#009999]">
-                  Total Fare <Receipt size={10} />
+                <div className="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1 font-display group-hover:text-[#009999]">
+                  Total Fare <Receipt size={9} />
                 </div>
-                <div className="text-sm font-bold text-slate-900 font-display">₹{itinerary.total_cost}</div>
+                <div className="text-xs sm:text-sm font-bold text-slate-900 font-display">₹{itinerary.total_cost}</div>
               </div>
             </div>
           </div>
@@ -160,25 +160,25 @@ Routing Logic: ${itinerary.explanation}`;
 
         {/* Fare Breakdown Drawer */}
         {showFareDetails && (
-          <div className="mt-5 pt-4 border-t border-slate-100 grid grid-cols-3 gap-3 text-center smooth-enter">
-            <div className="p-2.5 rounded-xl bg-[#e6f8f7] border border-[#99dedb]">
-              <span className="text-[10px] font-bold text-[#009999] uppercase block font-display">Metro Rail</span>
-              <span className="text-sm font-bold text-slate-900 font-display">₹{metroCost}</span>
+          <div className="mt-4 pt-3.5 border-t border-slate-100 grid grid-cols-3 gap-2 sm:gap-3 text-center smooth-enter">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#e6f8f7] border border-[#99dedb]">
+              <span className="text-[9px] sm:text-[10px] font-bold text-[#009999] uppercase block font-display">Metro</span>
+              <span className="text-xs sm:text-sm font-bold text-slate-900 font-display">₹{metroCost}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#e0f2fe] border border-[#bae6fd]">
-              <span className="text-[10px] font-bold text-[#0369a1] uppercase block font-display">Water Metro</span>
-              <span className="text-sm font-bold text-slate-900 font-display">₹{waterCost}</span>
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#e0f2fe] border border-[#bae6fd]">
+              <span className="text-[9px] sm:text-[10px] font-bold text-[#0369a1] uppercase block font-display">Water Metro</span>
+              <span className="text-xs sm:text-sm font-bold text-slate-900 font-display">₹{waterCost}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#fef3c7] border border-[#fde68a]">
-              <span className="text-[10px] font-bold text-[#b45309] uppercase block font-display">Feeder Bus</span>
-              <span className="text-sm font-bold text-slate-900 font-display">₹{feederCost}</span>
+            <div className="p-2 sm:p-2.5 rounded-xl bg-[#fef3c7] border border-[#fde68a]">
+              <span className="text-[9px] sm:text-[10px] font-bold text-[#b45309] uppercase block font-display">Feeder</span>
+              <span className="text-xs sm:text-sm font-bold text-slate-900 font-display">₹{feederCost}</span>
             </div>
           </div>
         )}
       </div>
 
       {/* Transit Timeline Legs */}
-      <div className="relative pl-8 border-l-2 border-teal-500/30 ml-4 space-y-6 py-2">
+      <div className="relative pl-6 sm:pl-8 border-l-2 border-teal-500/30 ml-3 sm:ml-4 space-y-4 sm:space-y-6 py-2">
         {itinerary.legs.map((leg, idx) => {
           const config = MODE_CONFIG[leg.mode] || MODE_CONFIG.walk;
           const Icon = config.icon;
@@ -186,25 +186,25 @@ Routing Logic: ${itinerary.explanation}`;
           return (
             <div key={idx} className="relative group">
               {/* Timeline Mode Icon Circle */}
-              <div className={`absolute -left-[49px] top-3 w-9 h-9 rounded-xl flex items-center justify-center shadow-md z-20 transition-transform duration-200 group-hover:scale-110 ${config.iconBg}`}>
-                <Icon size={17} />
+              <div className={`absolute -left-[37px] sm:-left-[49px] top-3 w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md z-20 transition-transform duration-200 group-hover:scale-110 ${config.iconBg}`}>
+                <Icon size={14} className="sm:w-[17px] sm:h-[17px]" />
               </div>
 
               {/* Connected Leg Detail Card */}
-              <div className="transit-card p-5 relative bg-white border border-slate-200/90 rounded-2xl group-hover:border-teal-400 group-hover:shadow-md transition-all duration-200">
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border font-display tracking-wider ${config.badge}`}>
+              <div className="transit-card p-4 sm:p-5 relative bg-white border border-slate-200/90 rounded-xl sm:rounded-2xl group-hover:border-teal-400 group-hover:shadow-md transition-all duration-200">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className={`text-[9px] sm:text-[10px] font-bold uppercase px-2 sm:px-2.5 py-0.5 rounded-full border font-display tracking-wider truncate max-w-[170px] sm:max-w-none ${config.badge}`}>
                     {config.label}
                   </span>
-                  <div className="flex items-center gap-2 text-xs text-slate-700 font-bold bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">
-                    <span className="flex items-center gap-1 font-display"><Clock size={12} className="text-slate-500" /> {leg.duration} min</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-slate-700 font-bold bg-slate-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-slate-200 shrink-0">
+                    <span className="flex items-center gap-1 font-display"><Clock size={11} className="text-slate-500" /> {leg.duration} min</span>
                     {leg.cost > 0 && <span className="text-[#009999] font-bold font-display">₹{leg.cost}</span>}
                   </div>
                 </div>
                 
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <h3 className="text-base font-bold text-slate-900 mb-1.5 flex items-center gap-2 font-display">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-1.5 font-display flex-wrap">
                       <span>{leg.from}</span>
                       <span className="text-[#009999]">➔</span>
                       <span>{leg.to}</span>
@@ -215,7 +215,7 @@ Routing Logic: ${itinerary.explanation}`;
                   </div>
 
                   {config.image && (
-                    <div className="w-20 h-14 rounded-xl overflow-hidden shrink-0 border border-slate-200 hidden sm:block shadow-2xs">
+                    <div className="w-16 h-12 sm:w-20 sm:h-14 rounded-lg sm:rounded-xl overflow-hidden shrink-0 border border-slate-200 hidden xs:block shadow-2xs">
                       <img 
                         src={config.image} 
                         alt={config.label} 
