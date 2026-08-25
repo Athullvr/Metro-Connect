@@ -17,25 +17,25 @@ import {
 
 const MODE_CONFIG = {
   metro: {
-    badge: 'bg-[#E6F6F5] text-[#007E7A] border-[#99DEDB]',
-    iconBg: 'bg-[#00A19C] text-white',
-    lineColor: 'border-[#00A19C]',
+    badge: 'bg-[#e6f8f7] text-[#009999] border-[#99dedb]',
+    iconBg: 'bg-gradient-to-br from-[#009999] to-[#007a7a] text-white',
+    lineColor: 'border-[#009999]',
     icon: Train,
     image: '/images/kochi-metro.jpg',
     label: 'Kochi Metro Blue Line'
   },
   water_metro: {
-    badge: 'bg-[#E0F2FE] text-[#0369A1] border-[#BAE6FD]',
-    iconBg: 'bg-[#0284C7] text-white',
-    lineColor: 'border-[#0284C7]',
+    badge: 'bg-[#e0f2fe] text-[#0369a1] border-[#bae6fd]',
+    iconBg: 'bg-gradient-to-br from-[#0284c7] to-[#0369a1] text-white',
+    lineColor: 'border-[#0284c7]',
     icon: Ship,
     image: '/images/kochi-water-metro.jpg',
     label: 'Kochi Water Metro'
   },
   feeder_bus: {
-    badge: 'bg-[#FEF3C7] text-[#B45309] border-[#FDE68A]',
-    iconBg: 'bg-[#D97706] text-white',
-    lineColor: 'border-[#D97706]',
+    badge: 'bg-[#fef3c7] text-[#b45309] border-[#fde68a]',
+    iconBg: 'bg-gradient-to-br from-[#d97706] to-[#b45309] text-white',
+    lineColor: 'border-[#d97706]',
     icon: Bus,
     image: '/images/kochi-feeder-bus.jpg',
     label: 'Metro Feeder e-Bus'
@@ -88,70 +88,71 @@ Routing Logic: ${itinerary.explanation}`;
   const feederCost = itinerary.legs.filter(l => l.mode === 'feeder_bus').reduce((sum, l) => sum + l.cost, 0);
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-8 text-left">
+    <div className="w-full max-w-3xl mx-auto px-4 py-8 md:py-10 text-left smooth-enter">
       {/* Top Action Bar */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-6">
         <button 
           onClick={onBack}
-          className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 transition-colors text-xs font-bold bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-md cursor-pointer"
+          className="flex items-center gap-1.5 text-slate-700 hover:text-[#009999] transition-all duration-200 text-xs font-bold bg-white border border-slate-200 hover:border-[#99dedb] px-4 py-2 rounded-full cursor-pointer shadow-2xs hover:scale-102"
         >
-          <ArrowLeft size={13} /> Back to Search
+          <ArrowLeft size={14} /> Back to Search
         </button>
 
         <button
           onClick={handleShare}
-          className="flex items-center gap-1.5 text-[#007E7A] bg-[#E6F6F5] border border-[#99DEDB] hover:bg-[#D4EFEB] px-3 py-1.5 rounded-md text-xs font-bold transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-[#009999] bg-[#e6f8f7] border border-[#99dedb] hover:bg-[#ccfbf1] px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer shadow-2xs hover:scale-102"
           title="Copy itinerary summary to clipboard"
         >
           {copied ? (
             <>
-              <Check size={13} className="text-[#007E7A]" /> Copied Ticket
+              <Check size={14} className="text-[#009999]" /> Copied Ticket
             </>
           ) : (
             <>
-              <Share2 size={13} /> Share Journey Ticket
+              <Share2 size={14} /> Share Journey Ticket
             </>
           )}
         </button>
       </div>
 
       {/* Transit Boarding Ticket Header */}
-      <div className="transit-card p-6 mb-7 border-t-4 border-t-[#00A19C] relative bg-white">
+      <div className="kmrl-glass-card p-6 md:p-7 mb-8 border-t-4 border-t-[#009999] relative bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-[10px] font-bold text-[#007E7A] uppercase tracking-widest mb-1 font-display">
-              Recommended Multimodal Route
+            <div className="text-[11px] font-bold text-[#009999] uppercase tracking-widest mb-1.5 font-display flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#009999] animate-kmrl-pulse" />
+              Recommended Multimodal Journey
             </div>
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-2 font-display">
+            <h2 className="text-xl md:text-3xl font-black text-slate-900 flex items-center gap-2.5 font-display tracking-tight">
               <span>{itinerary.legs[0]?.from}</span>
-              <ArrowRight size={16} className="text-slate-400 shrink-0" /> 
+              <ArrowRight size={20} className="text-[#009999] shrink-0" /> 
               <span>{itinerary.legs[itinerary.legs.length - 1]?.to}</span>
             </h2>
           </div>
           
           {/* Quick Metrics */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg">
-              <Clock size={15} className="text-[#007E7A]" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 px-3.5 py-2.5 rounded-2xl shadow-2xs">
+              <Clock size={16} className="text-[#009999]" />
               <div>
-                <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-display">Total Time</div>
-                <div className="text-xs font-bold text-slate-900 font-display">{itinerary.total_duration} mins</div>
+                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-display">Total Duration</div>
+                <div className="text-sm font-bold text-slate-900 font-display">{itinerary.total_duration} mins</div>
               </div>
             </div>
 
             <div 
               onClick={() => setShowFareDetails(!showFareDetails)}
-              className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors"
-              title="Click to view sub-fares"
+              className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 px-3.5 py-2.5 rounded-2xl cursor-pointer hover:bg-[#e6f8f7] hover:border-[#99dedb] transition-all duration-200 shadow-2xs group"
+              title="Click to view fare breakdown"
             >
-              <div className="w-5 h-5 rounded bg-[#00A19C] text-white flex items-center justify-center font-bold text-[10px]">
+              <div className="w-6 h-6 rounded-full bg-[#009999] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                 ₹
               </div>
               <div>
-                <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1 font-display">
-                  Est. Fare <Receipt size={9} />
+                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1 font-display group-hover:text-[#009999]">
+                  Total Fare <Receipt size={10} />
                 </div>
-                <div className="text-xs font-bold text-slate-900 font-display">₹{itinerary.total_cost}</div>
+                <div className="text-sm font-bold text-slate-900 font-display">₹{itinerary.total_cost}</div>
               </div>
             </div>
           </div>
@@ -159,53 +160,53 @@ Routing Logic: ${itinerary.explanation}`;
 
         {/* Fare Breakdown Drawer */}
         {showFareDetails && (
-          <div className="mt-4 pt-4 border-t border-slate-200 grid grid-cols-3 gap-2.5 text-center">
-            <div className="p-2 rounded-md bg-[#E6F6F5] border border-[#99DEDB]">
-              <span className="text-[9px] font-bold text-[#007E7A] uppercase block font-display">Metro Rail</span>
-              <span className="text-xs font-bold text-slate-900 font-display">₹{metroCost}</span>
+          <div className="mt-5 pt-4 border-t border-slate-100 grid grid-cols-3 gap-3 text-center smooth-enter">
+            <div className="p-2.5 rounded-xl bg-[#e6f8f7] border border-[#99dedb]">
+              <span className="text-[10px] font-bold text-[#009999] uppercase block font-display">Metro Rail</span>
+              <span className="text-sm font-bold text-slate-900 font-display">₹{metroCost}</span>
             </div>
-            <div className="p-2 rounded-md bg-[#E0F2FE] border border-[#BAE6FD]">
-              <span className="text-[9px] font-bold text-[#0369A1] uppercase block font-display">Water Metro</span>
-              <span className="text-xs font-bold text-slate-900 font-display">₹{waterCost}</span>
+            <div className="p-2.5 rounded-xl bg-[#e0f2fe] border border-[#bae6fd]">
+              <span className="text-[10px] font-bold text-[#0369a1] uppercase block font-display">Water Metro</span>
+              <span className="text-sm font-bold text-slate-900 font-display">₹{waterCost}</span>
             </div>
-            <div className="p-2 rounded-md bg-[#FEF3C7] border border-[#FDE68A]">
-              <span className="text-[9px] font-bold text-[#B45309] uppercase block font-display">Feeder Bus</span>
-              <span className="text-xs font-bold text-slate-900 font-display">₹{feederCost}</span>
+            <div className="p-2.5 rounded-xl bg-[#fef3c7] border border-[#fde68a]">
+              <span className="text-[10px] font-bold text-[#b45309] uppercase block font-display">Feeder Bus</span>
+              <span className="text-sm font-bold text-slate-900 font-display">₹{feederCost}</span>
             </div>
           </div>
         )}
       </div>
 
       {/* Transit Timeline Legs */}
-      <div className="relative pl-7 border-l-2 border-slate-300 ml-4 space-y-5 py-1">
+      <div className="relative pl-8 border-l-2 border-teal-500/30 ml-4 space-y-6 py-2">
         {itinerary.legs.map((leg, idx) => {
           const config = MODE_CONFIG[leg.mode] || MODE_CONFIG.walk;
           const Icon = config.icon;
 
           return (
-            <div key={idx} className="relative">
+            <div key={idx} className="relative group">
               {/* Timeline Mode Icon Circle */}
-              <div className={`absolute -left-[43px] top-2.5 w-8 h-8 rounded-lg flex items-center justify-center shadow-xs z-20 ${config.iconBg}`}>
-                <Icon size={16} />
+              <div className={`absolute -left-[49px] top-3 w-9 h-9 rounded-xl flex items-center justify-center shadow-md z-20 transition-transform duration-200 group-hover:scale-110 ${config.iconBg}`}>
+                <Icon size={17} />
               </div>
 
               {/* Connected Leg Detail Card */}
-              <div className="transit-card p-4 relative bg-white border border-slate-200">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded border font-display ${config.badge}`}>
+              <div className="transit-card p-5 relative bg-white border border-slate-200/90 rounded-2xl group-hover:border-teal-400 group-hover:shadow-md transition-all duration-200">
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border font-display tracking-wider ${config.badge}`}>
                     {config.label}
                   </span>
-                  <div className="flex items-center gap-2 text-xs text-slate-700 font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                    <span className="flex items-center gap-1 font-display"><Clock size={11} className="text-slate-500" /> {leg.duration} min</span>
-                    {leg.cost > 0 && <span className="text-[#007E7A] font-bold font-display">₹{leg.cost}</span>}
+                  <div className="flex items-center gap-2 text-xs text-slate-700 font-bold bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200">
+                    <span className="flex items-center gap-1 font-display"><Clock size={12} className="text-slate-500" /> {leg.duration} min</span>
+                    {leg.cost > 0 && <span className="text-[#009999] font-bold font-display">₹{leg.cost}</span>}
                   </div>
                 </div>
                 
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
-                    <h3 className="text-sm font-bold text-slate-900 mb-1 flex items-center gap-1.5 font-display">
+                    <h3 className="text-base font-bold text-slate-900 mb-1.5 flex items-center gap-2 font-display">
                       <span>{leg.from}</span>
-                      <span className="text-slate-400">➔</span>
+                      <span className="text-[#009999]">➔</span>
                       <span>{leg.to}</span>
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans">
@@ -214,11 +215,11 @@ Routing Logic: ${itinerary.explanation}`;
                   </div>
 
                   {config.image && (
-                    <div className="w-16 h-11 rounded-md overflow-hidden shrink-0 border border-slate-200 hidden sm:block">
+                    <div className="w-20 h-14 rounded-xl overflow-hidden shrink-0 border border-slate-200 hidden sm:block shadow-2xs">
                       <img 
                         src={config.image} 
                         alt={config.label} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                       />
                     </div>
                   )}
@@ -230,9 +231,9 @@ Routing Logic: ${itinerary.explanation}`;
       </div>
 
       {/* Routing Logic Explainer Box */}
-      <div className="transit-card p-4 mt-7 mb-5 bg-[#E6F6F5] border border-[#99DEDB]">
-        <h4 className="text-[10px] font-bold text-[#007E7A] uppercase tracking-wider mb-1 flex items-center gap-1.5 font-display">
-          <Info size={13} className="text-[#00A19C]" /> Route Optimization Logic
+      <div className="kmrl-glass-card p-5 mt-8 mb-6 bg-[#e6f8f7] border border-[#99dedb]">
+        <h4 className="text-xs font-bold text-[#007a7a] uppercase tracking-wider mb-1.5 flex items-center gap-1.5 font-display">
+          <Info size={14} className="text-[#009999]" /> KMRL Multimodal Route Optimization
         </h4>
         <p className="text-xs text-slate-700 leading-relaxed font-sans italic">
           "{itinerary.explanation}"
@@ -240,19 +241,19 @@ Routing Logic: ${itinerary.explanation}`;
       </div>
 
       {/* Disruption Simulator Trigger Banner */}
-      <div className="transit-card p-5 border border-slate-200 bg-white text-center">
-        <div className="w-9 h-9 rounded-lg bg-red-100 text-[#DC2626] flex items-center justify-center mx-auto mb-2 border border-red-200">
-          <AlertTriangle size={17} />
+      <div className="transit-card p-6 border border-slate-200 bg-white text-center rounded-2xl">
+        <div className="w-10 h-10 rounded-2xl bg-red-100 text-[#dc2626] flex items-center justify-center mx-auto mb-3 border border-red-200 shadow-2xs">
+          <AlertTriangle size={18} />
         </div>
-        <h3 className="text-sm font-bold text-slate-900 mb-0.5 font-display">KMRL Network Disruption Simulator</h3>
-        <p className="text-xs text-slate-500 max-w-md mx-auto mb-4 leading-normal">
-          Simulate high-tide jetty shutdowns, monsoon delays, or rail maintenance to test dynamic graph rerouting.
+        <h3 className="text-base font-bold text-slate-900 mb-1 font-display">KMRL Network Disruption Simulator</h3>
+        <p className="text-xs text-slate-500 max-w-md mx-auto mb-4 leading-relaxed">
+          Simulate high-tide jetty shutdowns, monsoon delays, or rail maintenance to test dynamic graph rerouting in real-time.
         </p>
         <button
           onClick={onTriggerDisruptionSim}
-          className="px-4 py-2 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs rounded-md shadow-xs cursor-pointer inline-flex items-center gap-1.5 font-display tracking-wider uppercase transition-colors"
+          className="px-5 py-2.5 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-xs rounded-full shadow-sm cursor-pointer inline-flex items-center gap-2 font-display tracking-wider uppercase transition-all duration-200 hover:scale-102 hover:shadow-red-600/30"
         >
-          <Zap size={13} /> Open Disruption Simulator
+          <Zap size={14} /> Open Disruption Simulator
         </button>
       </div>
     </div>
