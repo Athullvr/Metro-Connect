@@ -1,39 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-condensed: 'Barlow Condensed', 'Outfit', sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
   
   --color-canvas: #f8fafc;
-  --color-canvas-subtle: #f1f5f9;
+  --color-canvas-subtle: #f0fdfa;
   
   --color-charcoal: #0f172a;
-  --color-charcoal-muted: #475569;
+  --color-charcoal-muted: #334155;
   --color-charcoal-light: #64748b;
   
-  /* Official KMRL Brand Identity Tokens */
-  --color-kmrl-blue: #00a19c;
-  --color-kmrl-blue-dark: #007e7a;
-  --color-kmrl-blue-deep: #005f5c;
-  --color-kmrl-blue-light: #e6f6f5;
-  --color-kmrl-blue-border: #99dedb;
+  /* Official KMRL Brand Identity Tokens (from corporate.kochimetro.org) */
+  --color-kmrl-teal: #009999;
+  --color-kmrl-teal-hover: #008080;
+  --color-kmrl-teal-dark: #006666;
+  --color-kmrl-teal-light: #e6f6f5;
+  --color-kmrl-teal-border: #99dedb;
+  --color-kmrl-teal-glow: rgba(0, 153, 153, 0.25);
 
-  --color-kerala-green: #1b5e4f;
-  --color-kerala-green-dark: #134439;
-  --color-kerala-green-light: #e8f3f0;
-  --color-kerala-green-border: #a3ccbe;
+  --color-kmrl-cyan: #14b1b2;
+  --color-kmrl-cyan-hover: #128f95;
+  --color-kmrl-cyan-light: #ccfbf1;
+  --color-kmrl-cyan-border: #5eead4;
+
+  --color-kerala-green: #22c55e;
+  --color-kerala-green-dark: #15803d;
+  --color-kerala-green-light: #f0fdf4;
+  --color-kerala-green-border: #bbf7d0;
 
   --color-water-blue: #0284c7;
+  --color-water-blue-dark: #0369a1;
   --color-water-blue-light: #e0f2fe;
   --color-water-blue-border: #7dd3fc;
 
   --color-feeder-amber: #d97706;
+  --color-feeder-amber-dark: #b45309;
   --color-feeder-amber-light: #fef3c7;
   --color-feeder-amber-border: #fde68a;
 
   --color-disrupt-red: #dc2626;
+  --color-disrupt-red-dark: #b91c1c;
   --color-disrupt-red-light: #fee2e2;
   --color-disrupt-red-border: #fca5a5;
+}
+
+:root {
+  --ease-kmrl: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
@@ -42,81 +58,198 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
 
-/* Official Transit UI Card System (Functional & Crisp) */
+/* Headings with KMRL display typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* KMRL Hero Gradient Background */
+.kmrl-hero-gradient {
+  background: radial-gradient(120% 120% at 50% 0%, #ffffff 40%, #e6f8f7 75%, #ccfbf1 100%);
+}
+
+.kmrl-glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(0, 153, 153, 0.05);
+  transition: all 0.3s var(--ease-kmrl);
+}
+
+.kmrl-glass-card:hover {
+  border-color: rgba(0, 153, 153, 0.3);
+  box-shadow: 0 16px 36px -6px rgba(0, 153, 153, 0.12), 0 0 0 1px rgba(0, 153, 153, 0.1);
+}
+
+/* Official Transit UI Card System */
 .transit-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s var(--ease-kmrl);
 }
 
 .transit-card-interactive {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
-  transition: all 0.15s ease;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px 0 rgba(15, 23, 42, 0.04);
+  transition: all 0.25s var(--ease-kmrl);
+  cursor: pointer;
 }
 
 .transit-card-interactive:hover {
-  border-color: #00a19c;
-  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  transform: translateY(-2px);
+  border-color: #009999;
+  box-shadow: 0 12px 24px -4px rgba(0, 153, 153, 0.15), 0 4px 8px -2px rgba(0, 153, 153, 0.08);
 }
 
 .transit-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 /* Transit Input System */
 .transit-input {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 13px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: var(--font-sans);
   color: #0f172a;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s var(--ease-kmrl);
 }
 
 .transit-input:focus {
   outline: none;
-  border-color: #00a19c;
-  box-shadow: 0 0 0 2px rgba(0, 161, 156, 0.15);
+  border-color: #009999;
+  box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.15);
 }
 
-/* Primary Button (KMRL Aquamarine Solid) */
+/* Primary Button (KMRL Brand Teal Pill Button) */
 .btn-kmrl-primary {
-  background-color: #00a19c;
+  background: linear-gradient(135deg, #009999 0%, #008080 100%);
   color: #ffffff;
+  font-family: var(--font-sans);
   font-weight: 600;
-  border-radius: 10px;
-  border: 1px solid #008f8a;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  border-radius: 9999px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 153, 153, 0.35);
+  transition: all 0.25s var(--ease-kmrl);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-kmrl-primary:hover {
-  background-color: #008e89;
+  background: linear-gradient(135deg, #00a8a8 0%, #008f8f 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(0, 153, 153, 0.45);
 }
 
 .btn-kmrl-primary:active {
-  transform: scale(0.99);
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 153, 153, 0.3);
 }
 
-/* Secondary Button (Kerala Green Solid) */
+/* Secondary Button */
 .btn-kmrl-secondary {
-  background-color: #1b5e4f;
-  color: #ffffff;
+  background-color: transparent;
+  color: #0f172a;
+  font-family: var(--font-sans);
   font-weight: 600;
-  border-radius: 10px;
-  transition: background-color 0.15s ease;
+  border-radius: 9999px;
+  border: 1.5px solid #cbd5e1;
+  transition: all 0.25s var(--ease-kmrl);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-kmrl-secondary:hover {
-  background-color: #14493d;
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #009999;
+  transform: translateY(-1px);
+}
+
+/* Floating Blob Pill Button (from KMRL corporate site) */
+.blob-pill-btn {
+  position: relative;
+  background: #009999;
+  color: #ffffff !important;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 153, 153, 0.3);
+  transition: all 0.3s var(--ease-kmrl);
+  cursor: pointer;
+}
+
+.blob-pill-btn:hover {
+  background: #008585;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 153, 153, 0.4);
+}
+
+/* Animated Pulse Badge */
+@keyframes kmrl-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+.animate-kmrl-pulse {
+  animation: kmrl-pulse 2s infinite ease-in-out;
+}
+
+/* Custom Smooth Transitions */
+.smooth-enter {
+  animation: smoothFadeUp 0.35s var(--ease-kmrl) forwards;
+}
+
+@keyframes smoothFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalFadeIn 0.3s var(--ease-kmrl) forwards;
 }
 
 /* Custom Scrollbar */
@@ -127,13 +260,15 @@ body {
 
 .scrollbar-thin::-webkit-scrollbar-track {
   background: #f1f5f9;
+  border-radius: 4px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #009999;
 }

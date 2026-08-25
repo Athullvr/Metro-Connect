@@ -189,46 +189,46 @@ export default function Home({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8 md:py-10">
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 md:py-12 smooth-enter">
       
-      {/* Official KMRL Transit Header / Hero */}
-      <div className="text-center mb-8 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#E6F6F5] border border-[#99DEDB] text-[#007E7A] text-xs font-semibold mb-3">
-          <span className="w-2 h-2 rounded-full bg-[#00A19C]" />
-          KMRL Integrated Mobility Network
+      {/* Official KMRL Transit Hero */}
+      <div className="text-center mb-10 max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#e6f8f7] border border-[#99dedb] text-[#009999] text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
+          <span className="w-2 h-2 rounded-full bg-[#009999] animate-kmrl-pulse" />
+          The Heartbeat of Kochi
         </div>
-        <h1 className="font-display font-bold text-2xl md:text-4xl text-slate-900 tracking-tight mb-2">
-          Kochi Multimodal Journey Planner
+        <h1 className="font-display font-black text-3xl md:text-5xl text-slate-900 tracking-tight mb-3 leading-tight">
+          Bridging <span className="text-[#009999]">Distances</span>, Connecting <span className="text-[#14b1b2]">Lives</span>
         </h1>
-        <p className="text-slate-600 text-xs md:text-sm max-w-lg mx-auto leading-relaxed">
-          Integrated schedule and routing across Kochi Metro Blue Line, Water Metro ferries, and electric feeder buses.
+        <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-sans">
+          Smarter journeys. Faster connections. Integrated schedule and routing across Kochi Metro Blue Line, Water Metro ferries, and electric feeder buses.
         </p>
       </div>
 
       {/* Main Search Planner Card */}
-      <div className="transit-card p-5 md:p-7 relative bg-white">
+      <div className="kmrl-glass-card p-6 md:p-8 relative bg-white/95">
         
         {/* Card Header Actions (Stations Explorer + Settings) */}
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#00A19C]" />
+        <div className="flex items-center justify-between pb-5 mb-6 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-3 h-3 rounded-full bg-[#009999] shadow-xs" />
             <span className="text-xs font-bold font-display uppercase tracking-wider text-slate-800">
-              Trip Coordinator
+              Trip Coordinator & Route Planner
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={() => setShowMapModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#E8F3F0] hover:bg-[#D5EAE4] text-[#134439] text-xs font-bold border border-[#A3CCBE] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#e6f8f7] hover:bg-[#ccfbf1] text-[#007a7a] text-xs font-bold border border-[#99dedb] transition-all duration-200 hover:scale-[1.02] cursor-pointer shadow-2xs"
               title="Open full network station explorer"
             >
-              <Compass size={13} /> Stations Explorer
+              <Compass size={14} className="text-[#009999]" /> Stations Explorer
             </button>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="p-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors border border-slate-200 cursor-pointer"
+              className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all duration-200 border border-slate-200 cursor-pointer"
               title="Configure Engine Settings"
               aria-label="Configure Engine Settings"
             >
@@ -239,16 +239,16 @@ export default function Home({
 
         {/* Engine Settings Drawer */}
         {showSettings && (
-          <div className="mb-5 p-4 rounded-lg bg-slate-50 border border-slate-200 text-left">
-            <h3 className="text-xs font-bold text-slate-800 mb-2 flex items-center gap-1.5 font-display">
-              <Settings size={13} className="text-[#007E7A]" /> Router Engine Settings
+          <div className="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200 text-left smooth-enter">
+            <h3 className="text-xs font-bold text-slate-800 mb-2.5 flex items-center gap-1.5 font-display">
+              <Settings size={13} className="text-[#009999]" /> Router Engine Settings
             </h3>
-            <div className="flex bg-slate-200 p-1 rounded-md max-w-sm">
+            <div className="flex bg-slate-200/80 p-1 rounded-lg max-w-sm">
               <button
                 type="button"
                 onClick={() => setUseSimulator(true)}
-                className={`flex-1 py-1 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
-                  useSimulator ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600'
+                className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                  useSimulator ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <WifiOff size={12} /> Offline Graph
@@ -256,8 +256,8 @@ export default function Home({
               <button
                 type="button"
                 onClick={() => setUseSimulator(false)}
-                className={`flex-1 py-1 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
-                  !useSimulator ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600'
+                className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                  !useSimulator ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <Wifi size={12} /> Live AI Proxy
@@ -268,26 +268,26 @@ export default function Home({
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Inputs Row with Center Swap Button */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-3 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr] gap-3.5 items-end">
             
             {/* Origin Input */}
             <div ref={originRef} className="relative text-left">
-              <div className="flex items-center justify-between mb-1">
-                <label htmlFor="origin-input" className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider font-display">
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="origin-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-display">
                   Origin Station / Jetty
                 </label>
                 <button
                   type="button"
                   onClick={handleUseMyLocation}
                   disabled={locating}
-                  className="flex items-center gap-1 text-[10px] font-semibold text-[#007E7A] hover:underline cursor-pointer disabled:opacity-50"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-[#009999] hover:text-[#007a7a] transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  <LocateFixed size={11} className={locating ? 'animate-spin' : ''} />
+                  <LocateFixed size={12} className={locating ? 'animate-spin text-[#009999]' : ''} />
                   {locating ? 'Locating...' : 'Use GPS'}
                 </button>
               </div>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#00A19C]" size={15} aria-hidden="true" />
+              <div className="relative group">
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#009999] transition-transform duration-200 group-focus-within:scale-110" size={16} aria-hidden="true" />
                 <input
                   id="origin-input"
                   type="text"
@@ -305,25 +305,25 @@ export default function Home({
                     setShowDestDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowOriginDropdown(false))}
-                  className="w-full transit-input pl-9 pr-8 py-2.5 font-medium"
+                  className="w-full transit-input pl-10 pr-9 py-3 font-medium text-sm text-slate-900 bg-white placeholder-slate-400"
                 />
                 {origin && (
                   <button
                     type="button"
                     onClick={() => setOrigin('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 rounded-full transition-colors cursor-pointer"
                   >
                     ✕
                   </button>
                 )}
               </div>
               {locationError && (
-                <p role="alert" className="text-[10px] text-rose-600 mt-1 font-medium">{locationError}</p>
+                <p role="alert" className="text-xs text-rose-600 mt-1.5 font-medium">{locationError}</p>
               )}
 
               {/* Suggestions Dropdown */}
               {showOriginDropdown && originSuggestions.length > 0 && (
-                <div role="listbox" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200 rounded-lg shadow-lg mt-1 max-h-52 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100">
+                <div role="listbox" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200/90 rounded-xl shadow-xl mt-1.5 max-h-56 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100 smooth-enter">
                   {originSuggestions.map((s, idx) => (
                     <button
                       key={idx}
@@ -334,15 +334,15 @@ export default function Home({
                         setOrigin(s.name);
                         setShowOriginDropdown(false);
                       }}
-                      className="w-full text-left px-3.5 py-2 text-xs hover:bg-[#E6F6F5] flex items-center justify-between transition-colors cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#e6f8f7] flex items-center justify-between transition-colors cursor-pointer group"
                     >
-                      <span className="font-semibold text-slate-800">{s.name}</span>
-                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                      <span className="font-semibold text-slate-800 group-hover:text-[#009999] transition-colors">{s.name}</span>
+                      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
                         s.type.includes('Metro Station') 
-                          ? 'bg-[#E6F6F5] text-[#007E7A] border border-[#99DEDB]' 
+                          ? 'bg-[#e6f8f7] text-[#009999] border border-[#99dedb]' 
                           : s.type.includes('Water') 
-                            ? 'bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]' 
-                            : 'bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]'
+                            ? 'bg-[#e0f2fe] text-[#0369a1] border border-[#bae6fd]' 
+                            : 'bg-[#fef3c7] text-[#b45309] border border-[#fde68a]'
                       }`}>
                         {s.type.replace('Kochi ', '')}
                       </span>
@@ -358,7 +358,7 @@ export default function Home({
                 type="button"
                 onClick={handleSwapStops}
                 title="Swap origin and destination"
-                className="w-9 h-9 rounded-md bg-slate-100 hover:bg-[#E6F6F5] hover:text-[#007E7A] text-slate-600 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer font-bold text-sm"
+                className="w-10 h-10 rounded-full bg-slate-100 hover:bg-[#e6f8f7] hover:text-[#009999] text-slate-600 border border-slate-200 flex items-center justify-center transition-all duration-200 hover:scale-105 hover:rotate-180 cursor-pointer font-bold text-base shadow-2xs"
               >
                 ⇄
               </button>
@@ -366,11 +366,11 @@ export default function Home({
 
             {/* Destination Input */}
             <div ref={destRef} className="relative text-left">
-              <label htmlFor="destination-input" className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider font-display mb-1">
+              <label htmlFor="destination-input" className="block text-xs font-bold text-slate-700 uppercase tracking-wider font-display mb-1.5">
                 Destination Station / Jetty
               </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1B5E4F]" size={15} aria-hidden="true" />
+              <div className="relative group">
+                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#22c55e] transition-transform duration-200 group-focus-within:scale-110" size={16} aria-hidden="true" />
                 <input
                   id="destination-input"
                   type="text"
@@ -388,13 +388,13 @@ export default function Home({
                     setShowOriginDropdown(false);
                   }}
                   onKeyDown={(e) => handleDropdownKeyDown(e, () => setShowDestDropdown(false))}
-                  className="w-full transit-input pl-9 pr-8 py-2.5 font-medium"
+                  className="w-full transit-input pl-10 pr-9 py-3 font-medium text-sm text-slate-900 bg-white placeholder-slate-400"
                 />
                 {destination && (
                   <button
                     type="button"
                     onClick={() => setDestination('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 rounded-full transition-colors cursor-pointer"
                   >
                     ✕
                   </button>
@@ -403,7 +403,7 @@ export default function Home({
 
               {/* Suggestions Dropdown */}
               {showDestDropdown && destSuggestions.length > 0 && (
-                <div role="listbox" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200 rounded-lg shadow-lg mt-1 max-h-52 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100">
+                <div role="listbox" className="absolute top-[100%] left-0 w-full bg-white border border-slate-200/90 rounded-xl shadow-xl mt-1.5 max-h-56 overflow-y-auto scrollbar-thin z-50 divide-y divide-slate-100 smooth-enter">
                   {destSuggestions.map((s, idx) => (
                     <button
                       key={idx}
@@ -414,15 +414,15 @@ export default function Home({
                         setDestination(s.name);
                         setShowDestDropdown(false);
                       }}
-                      className="w-full text-left px-3.5 py-2 text-xs hover:bg-[#E8F3F0] flex items-center justify-between transition-colors cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-xs hover:bg-[#e8f3f0] flex items-center justify-between transition-colors cursor-pointer group"
                     >
-                      <span className="font-semibold text-slate-800">{s.name}</span>
-                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                      <span className="font-semibold text-slate-800 group-hover:text-[#22c55e] transition-colors">{s.name}</span>
+                      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
                         s.type.includes('Metro Station') 
-                          ? 'bg-[#E6F6F5] text-[#007E7A] border border-[#99DEDB]' 
+                          ? 'bg-[#e6f8f7] text-[#009999] border border-[#99dedb]' 
                           : s.type.includes('Water') 
-                            ? 'bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]' 
-                            : 'bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]'
+                            ? 'bg-[#e0f2fe] text-[#0369a1] border border-[#bae6fd]' 
+                            : 'bg-[#fef3c7] text-[#b45309] border border-[#fde68a]'
                       }`}>
                         {s.type.replace('Kochi ', '')}
                       </span>
@@ -434,62 +434,62 @@ export default function Home({
 
           </div>
 
-          {/* Trip Preferences (Solid Badges) */}
+          {/* Trip Preferences (Sleek Pills) */}
           <div className="text-left">
-            <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider font-display mb-1.5">
-              Routing Criteria
+            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider font-display mb-2">
+              Routing Preferences
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <button
                 type="button"
                 onClick={() => toggleConstraint('speed')}
-                className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                   constraints.speed
-                    ? 'bg-[#00A19C] text-white border-[#008F8A]'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                    ? 'bg-[#009999] text-white border-[#008080] shadow-sm shadow-teal-500/20 scale-[1.02]'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
                 }`}
               >
-                <Activity size={13} /> Fastest Route
+                <Activity size={14} /> Fastest Route
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('luggage')}
-                className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                   constraints.luggage
-                    ? 'bg-[#1B5E4F] text-white border-[#14493D]'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                    ? 'bg-[#15803d] text-white border-[#166534] shadow-sm shadow-green-600/20 scale-[1.02]'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
                 }`}
               >
-                <Briefcase size={13} /> Luggage Friendly
+                <Briefcase size={14} /> Luggage Friendly
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('scenic')}
-                className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                   constraints.scenic
-                    ? 'bg-[#0284C7] text-white border-[#0369A1]'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                    ? 'bg-[#0284c7] text-white border-[#0369a1] shadow-sm shadow-sky-500/20 scale-[1.02]'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
                 }`}
               >
-                <Compass size={13} /> Water Metro
+                <Compass size={14} /> Water Metro
               </button>
               <button
                 type="button"
                 onClick={() => toggleConstraint('lowCost')}
-                className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer ${
                   constraints.lowCost
-                    ? 'bg-slate-800 text-white border-slate-900'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                    ? 'bg-slate-800 text-white border-slate-900 shadow-sm scale-[1.02]'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
                 }`}
               >
-                <TrendingDown size={13} /> Lowest Fare
+                <TrendingDown size={14} /> Lowest Fare
               </button>
             </div>
           </div>
 
           {/* Plan Error Message */}
           {planError && (
-            <div role="alert" className="p-3 rounded-md bg-rose-50 border border-rose-200 text-xs text-rose-700 text-left">
+            <div role="alert" className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 text-left smooth-enter">
               <p className="font-semibold">{planError.message}</p>
               {planError.suggestions?.length > 0 && (
                 <p className="mt-1 text-rose-600">
@@ -499,49 +499,49 @@ export default function Home({
             </div>
           )}
 
-          {/* Submit CTA Button */}
+          {/* Submit CTA Button (Kochi Metro Brand Pill Style) */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 btn-kmrl-primary text-xs uppercase tracking-wider font-display font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 btn-kmrl-primary text-sm uppercase tracking-wider font-display font-bold flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
           >
             {loading ? (
-              <span>Calculating Optimal Multimodal Route...</span>
+              <span className="animate-pulse">Calculating Optimal Multimodal Route...</span>
             ) : (
               <span className="flex items-center gap-2">
-                <Search size={14} /> Plan Integrated Transit Route
+                <Search size={16} /> Plan Integrated Transit Journey
               </span>
             )}
           </button>
         </form>
 
         {/* Popular Route Shortcuts */}
-        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2 text-left">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-display">Frequent Routes:</span>
+        <div className="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center gap-2.5 text-left">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display">Frequent Routes:</span>
           {SUGGESTIONS.map((s, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => handleSuggestClick(s)}
-              className="text-xs bg-slate-50 hover:bg-[#E6F6F5] border border-slate-200 hover:border-[#99DEDB] text-slate-700 hover:text-[#007E7A] px-2.5 py-1 rounded-md transition-colors cursor-pointer font-medium inline-flex items-center gap-1.5"
+              className="text-xs bg-slate-50 hover:bg-[#e6f8f7] border border-slate-200 hover:border-[#99dedb] text-slate-700 hover:text-[#009999] px-3 py-1.5 rounded-full transition-all duration-200 hover:scale-[1.02] cursor-pointer font-medium inline-flex items-center gap-2 shadow-2xs"
             >
               <span>{s.label}</span>
-              <span className="text-[9px] font-bold text-[#007E7A] bg-[#E6F6F5] px-1.5 py-0.5 rounded border border-[#99DEDB]">{s.badge}</span>
+              <span className="text-[10px] font-bold text-[#009999] bg-[#e6f8f7] px-2 py-0.5 rounded-full border border-[#99dedb]">{s.badge}</span>
             </button>
           ))}
         </div>
 
         {/* Recent Searches */}
         {recentTrips.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-left flex-wrap gap-2">
+          <div className="mt-3.5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-left flex-wrap gap-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-display">Recent:</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-display">Recent:</span>
               {recentTrips.slice(0, 3).map((trip) => (
                 <button
                   key={trip.id}
                   type="button"
                   onClick={() => handleSuggestClick({ origin: trip.origin, destination: trip.destination })}
-                  className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-2 py-0.5 rounded transition-colors cursor-pointer font-medium"
+                  className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-full transition-colors cursor-pointer font-medium"
                 >
                   {trip.origin} ➔ {trip.destination}
                 </button>
@@ -550,7 +550,7 @@ export default function Home({
             <button
               type="button"
               onClick={handleClearHistory}
-              className="text-[10px] font-semibold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+              className="text-xs font-semibold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
             >
               Clear
             </button>
@@ -560,44 +560,47 @@ export default function Home({
       </div>
 
       {/* Kochi Integrated Transit Infrastructure Showcase */}
-      <div className="mt-10 text-left">
-        <div className="mb-4">
-          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider font-display">
-            KMRL Integrated Infrastructure
+      <div className="mt-12 text-left">
+        <div className="mb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e6f8f7] text-[#009999] text-[11px] font-bold uppercase tracking-wider mb-1.5">
+            KMRL Transit Corridors
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 font-display">
+            Integrated Mobility Infrastructure
           </h3>
-          <p className="text-xs text-slate-500">
-            Official operational corridors under the unified Kochi transit framework.
+          <p className="text-xs md:text-sm text-slate-500">
+            Unified ticketing, real-time tracking, and green transport networks across Greater Kochi.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Metro Card */}
           <div 
             onClick={() => handleSuggestClick({ origin: 'Aluva', destination: 'Maharajas College' })}
-            className="transit-card-interactive overflow-hidden flex flex-col cursor-pointer"
+            className="transit-card-interactive overflow-hidden flex flex-col group rounded-2xl"
           >
-            <div className="relative h-36 bg-slate-100 overflow-hidden">
+            <div className="relative h-40 bg-slate-100 overflow-hidden">
               <img 
                 src="/images/kochi-metro.jpg" 
                 alt="Kochi Metro Blue Line" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#00A19C] text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 font-display">
-                <Train size={10} /> 25 Stations
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#009999] text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 font-display shadow-sm">
+                <Train size={11} /> 25 Stations
               </span>
             </div>
-            <div className="p-3.5 flex-1 flex flex-col justify-between bg-white">
+            <div className="p-4 flex-1 flex flex-col justify-between bg-white">
               <div>
-                <h4 className="text-xs font-bold text-slate-900 font-display mb-1">
+                <h4 className="text-sm font-bold text-slate-900 font-display mb-1 group-hover:text-[#009999] transition-colors">
                   Kochi Metro Blue Line
                 </h4>
-                <p className="text-[11px] text-slate-500 leading-normal mb-2">
-                  Aluva to Tripunithura spine. High-frequency elevated rapid transit.
+                <p className="text-xs text-slate-500 leading-relaxed mb-3">
+                  Aluva to Tripunithura spine. High-frequency elevated rapid transit with contactless ticketing.
                 </p>
               </div>
-              <div className="flex items-center justify-between text-[10px] font-bold text-[#007E7A] pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between text-xs font-bold text-[#009999] pt-2.5 border-t border-slate-100">
                 <span>Aluva ➔ Maharajas</span>
-                <ArrowRight size={11} />
+                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-1" />
               </div>
             </div>
           </div>
@@ -605,30 +608,30 @@ export default function Home({
           {/* Water Metro Card */}
           <div 
             onClick={() => handleSuggestClick({ origin: 'High Court Jetty', destination: 'Fort Kochi Jetty' })}
-            className="transit-card-interactive overflow-hidden flex flex-col cursor-pointer"
+            className="transit-card-interactive overflow-hidden flex flex-col group rounded-2xl"
           >
-            <div className="relative h-36 bg-slate-100 overflow-hidden">
+            <div className="relative h-40 bg-slate-100 overflow-hidden">
               <img 
                 src="/images/kochi-water-metro.jpg" 
                 alt="Kochi Water Metro Catamaran" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#0284C7] text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 font-display">
-                <Ship size={10} /> 15 Jetties
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0284c7] text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 font-display shadow-sm">
+                <Ship size={11} /> 15 Jetties
               </span>
             </div>
-            <div className="p-3.5 flex-1 flex flex-col justify-between bg-white">
+            <div className="p-4 flex-1 flex flex-col justify-between bg-white">
               <div>
-                <h4 className="text-xs font-bold text-slate-900 font-display mb-1">
+                <h4 className="text-sm font-bold text-slate-900 font-display mb-1 group-hover:text-[#0284c7] transition-colors">
                   Kochi Water Metro
                 </h4>
-                <p className="text-[11px] text-slate-500 leading-normal mb-2">
-                  Electric hybrid catamarans connecting city hubs across Vembanad backwaters.
+                <p className="text-xs text-slate-500 leading-relaxed mb-3">
+                  Electric hybrid catamarans connecting city islands and hubs across Vembanad backwaters.
                 </p>
               </div>
-              <div className="flex items-center justify-between text-[10px] font-bold text-[#0284C7] pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0284c7] pt-2.5 border-t border-slate-100">
                 <span>High Court ➔ Fort Kochi</span>
-                <ArrowRight size={11} />
+                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-1" />
               </div>
             </div>
           </div>
@@ -636,30 +639,30 @@ export default function Home({
           {/* Feeder Bus Card */}
           <div 
             onClick={() => handleSuggestClick({ origin: 'Kalamassery', destination: 'Infopark' })}
-            className="transit-card-interactive overflow-hidden flex flex-col cursor-pointer"
+            className="transit-card-interactive overflow-hidden flex flex-col group rounded-2xl"
           >
-            <div className="relative h-36 bg-slate-100 overflow-hidden">
+            <div className="relative h-40 bg-slate-100 overflow-hidden">
               <img 
                 src="/images/kochi-feeder-bus.jpg" 
                 alt="Metro Feeder e-Bus" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded bg-[#D97706] text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 font-display">
-                <Bus size={10} /> 18 Feeder Routes
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#d97706] text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 font-display shadow-sm">
+                <Bus size={11} /> 18 Feeder Routes
               </span>
             </div>
-            <div className="p-3.5 flex-1 flex flex-col justify-between bg-white">
+            <div className="p-4 flex-1 flex flex-col justify-between bg-white">
               <div>
-                <h4 className="text-xs font-bold text-slate-900 font-display mb-1">
+                <h4 className="text-sm font-bold text-slate-900 font-display mb-1 group-hover:text-[#d97706] transition-colors">
                   Metro Feeder e-Buses
                 </h4>
-                <p className="text-[11px] text-slate-500 leading-normal mb-2">
-                  Last-mile connectivity to Infopark, SmartCity, and regional healthcare hubs.
+                <p className="text-xs text-slate-500 leading-relaxed mb-3">
+                  Last-mile zero-emission connectivity to Infopark, SmartCity, and regional healthcare hubs.
                 </p>
               </div>
-              <div className="flex items-center justify-between text-[10px] font-bold text-[#D97706] pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between text-xs font-bold text-[#d97706] pt-2.5 border-t border-slate-100">
                 <span>Kalamassery ➔ Infopark</span>
-                <ArrowRight size={11} />
+                <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-1" />
               </div>
             </div>
           </div>
